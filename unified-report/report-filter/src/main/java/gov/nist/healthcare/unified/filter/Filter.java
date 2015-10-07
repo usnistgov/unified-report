@@ -1,5 +1,7 @@
 package gov.nist.healthcare.unified.filter;
 
+import gov.nist.healthcare.unified.exceptions.ConversionException;
+import gov.nist.healthcare.unified.exceptions.NotFoundException;
 import gov.nist.healthcare.unified.expressions.Action;
 import gov.nist.healthcare.unified.model.EnhancedReport;
 import gov.nist.healthcare.unified.model.Section;
@@ -45,6 +47,36 @@ public class Filter {
 		return result;
 	}
 	
+	public EnhancedReport removeDuplicate(EnhancedReport r) {
+		EnhancedReport result = new EnhancedReport();
+		result.setMetadata(r.getMetadata());
+		result.initCounts();
+		
+		ArrayList<Section> entries = r.getDetections().entries();
+		ArrayList<Section> Rentries = new ArrayList<Section>();
+		for (Section s : entries) {
+			if(!search(Rentries,s))
+				Rentries.add(s);
+		}
+		result.put(Rentries);
+		return result;
+	}
+	
+	public boolean same(Section entry1,Section entry2){
+		try {
+			return path(entry1.getString("path")).equals(path(entry2.getString("path"))) && entry1.getString("description").equals(entry2.getString("description"));
+		} catch (NotFoundException | ConversionException e) {
+			return false;
+		}
+	}
+	
+	public boolean search(ArrayList<Section> list, Section s){
+		for (Section se : list) {
+			if(same(se,s))
+				return true;
+		}
+		return false;
+	}
 	public boolean test(Section s, ArrayList<Condition> r) {
 		for (Condition rest : r) {
 			try {
@@ -56,5 +88,14 @@ public class Filter {
 			}
 		}
 		return true;
+	}
+	
+	public String path(String p){
+		String SEG = p.substring(0, 3);
+		if(p.contains("-")){
+			return SEG + "-" + p.split("-")[1];
+		}
+		else
+			return SEG;
 	}
 }
