@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>gov.nist.healthcare.hl7.v2.unifiedreport</groupId>
 	<artifactId>unified-report</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.4-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<build>
 		<plugins>
@@ -26,8 +26,8 @@
 	<dependencies>
 		<dependency>
 			<groupId>gov.nist</groupId>
-			<artifactId>hl7-v2-validation</artifactId>
-			<version>1.0.0-beta-10.8-SNAPSHOT</version>
+			<artifactId>edi-validation</artifactId>
+			<version>1.0.0-beta-10.9-SNAPSHOT</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>

@@ -5,8 +5,8 @@ import gov.nist.validation.report.Report;
 import hl7.v2.instance.Element;
 import hl7.v2.instance.Separators;
 import hl7.v2.profile.Profile;
-import hl7.v2.profile.XMLDeserializer;
-import hl7.v2.validation.SyncHL7Validator;
+import ncpdp.script.profile.XMLDeserializer;
+import edi.ncpdp.script.validation.SyncNCPDPValidator;
 import hl7.v2.validation.content.ConformanceContext;
 import hl7.v2.validation.content.DefaultConformanceContext;
 import hl7.v2.validation.vs.ValueSetLibrary;
@@ -40,11 +40,11 @@ public class Validation {
 //		Map<String, Function3<Plugin, Element, Separators, EvalResult>> pluginMap = Map$.MODULE$.empty();
 //		ValueSetLibrary valueSetLibrary = ValueSetLibrary.apply(is_vs).get();
 		
-		return new SyncHL7Validator(is_pro, is_vs, is_cons).check(message, id);
+		return new SyncNCPDPValidator(is_pro, is_vs, is_cons).check(message, id);
 	}
 	
 	public static Report validate(Profile profile,ConformanceContext constraint,ValueSetLibrary vs,String message,String id) throws Exception{	
-		return new SyncHL7Validator(profile, vs, constraint).check(message, id);
+		return new SyncNCPDPValidator(profile, vs, constraint).check(message, id);
 	}
 	
 //	public static Report validate(){

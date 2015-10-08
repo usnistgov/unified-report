@@ -12,7 +12,7 @@ import gov.nist.healthcare.unified.model.EnhancedReport;
 import gov.nist.healthcare.unified.model.Section;
 import gov.nist.validation.report.Report;
 import hl7.v2.profile.Profile;
-import hl7.v2.profile.XMLDeserializer;
+import ncpdp.script.profile.XMLDeserializer;
 import hl7.v2.validation.content.ConformanceContext;
 import hl7.v2.validation.vs.ValueSetLibrary;
 
