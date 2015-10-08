@@ -47,7 +47,7 @@ public class Filter {
 		return result;
 	}
 	
-	public EnhancedReport removeDuplicate(EnhancedReport r) {
+	public static EnhancedReport removeDuplicate(EnhancedReport r) {
 		EnhancedReport result = new EnhancedReport();
 		result.setMetadata(r.getMetadata());
 		result.initCounts();
@@ -62,7 +62,7 @@ public class Filter {
 		return result;
 	}
 	
-	public boolean same(Section entry1,Section entry2){
+	public static boolean same(Section entry1,Section entry2){
 		try {
 			return path(entry1.getString("path")).equals(path(entry2.getString("path"))) && entry1.getString("description").equals(entry2.getString("description"));
 		} catch (NotFoundException | ConversionException e) {
@@ -70,7 +70,7 @@ public class Filter {
 		}
 	}
 	
-	public boolean search(ArrayList<Section> list, Section s){
+	public static boolean search(ArrayList<Section> list, Section s){
 		for (Section se : list) {
 			if(same(se,s))
 				return true;
@@ -90,7 +90,7 @@ public class Filter {
 		return true;
 	}
 	
-	public String path(String p){
+	public static String path(String p){
 		String SEG = p.substring(0, 3);
 		if(p.contains("-")){
 			return SEG + "-" + p.split("-")[1];
