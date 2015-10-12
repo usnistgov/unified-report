@@ -91,6 +91,16 @@ public class EnhancedReport implements AccessibleObject {
 			e.printStackTrace();
 		}
 	}
+	
+	public void initCounts(){
+		Section s = new Section("counts");
+		s.put("informational",0);
+		s.put("error", 0);
+		s.put("affirmative",0);
+		s.put("alert", 0);
+		s.put("warning", 0);
+		this.getMetadata().put(s);
+	}
 
 	public Object to(String format) throws Exception {
 		initC();

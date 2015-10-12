@@ -18,17 +18,21 @@
 		<html>
 			<head>
 				<link rel="stylesheet" type="text/css" href="style/main.scss" />
-				 <script type="text/javascript">
+				<script type="text/javascript">
 					function toggle_visibility(id, elm) {
-					var e = document.getElementById(id);
+					var e =
+					document.getElementById(id);
 					if (elm.checked == true)
 					e.style.display = '';
 					else
 					e.style.display = 'none';
 					};
-					function toggle_visibilityC(cls, elm) {
-					var e = document.getElementsByClassName(cls);
-					for(var i = e.length - 1; i >= 0; i--) {
+					function
+					toggle_visibilityC(cls, elm) {
+					var e =
+					document.getElementsByClassName(cls);
+					for(var i = e.length - 1; i >=
+					0; i--) {
 					if (elm.checked == true)
 					e[i].style.display = '';
 					else
@@ -162,13 +166,21 @@
 							<input type="checkbox">
 								<xsl:attribute name="onclick">toggle_visibility('<xsl:value-of
 									select="$classification" />',this)</xsl:attribute>
+								<xsl:if test="$classification='error'">
+									<xsl:attribute name="checked">true</xsl:attribute>
+								</xsl:if>
 							</input>
 						</td>
 					</tr>
 				</tbody>
 			</table>
 			<table class="forumline cf-report-category" width="100%"
-				cellspacing="1" cellpadding="2" style="display : none;">
+				cellspacing="1" cellpadding="2">
+
+				<xsl:if test="$classification!='error'">
+					<xsl:attribute name="style">display : none;</xsl:attribute>
+				</xsl:if>
+
 				<xsl:attribute name="id"><xsl:value-of select='$classification' /></xsl:attribute>
 				<xsl:apply-templates
 					select="./report:AssertionList/report:Assertion[@Result = $classification][generate-id(.)=generate-id(key('categs',concat(@Type,'+',@Result))[1])]" />
@@ -324,7 +336,8 @@
 					</tr>
 					<tr class="border_bottom">
 						<td class="row6 " style="color: red; font-weight: bold">
-							<input type="checkbox" onclick="toggle_visibility('error',this)" />
+							<input checked="true" type="checkbox"
+								onclick="toggle_visibility('error',this)" />
 							<xsl:value-of select="../report:HeaderReport/message:ErrorCount" />
 							Errors
 						</td>
