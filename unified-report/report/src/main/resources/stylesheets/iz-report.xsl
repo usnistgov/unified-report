@@ -17,7 +17,7 @@
 	<xsl:template match="/report:HL7V2MessageValidationReport">
 		<html>
 			<head>
-				<link rel="stylesheet" type="text/css" href="style/main.scss" />
+				<link rel="stylesheet" type="text/css" href="report.css" />
 				<script type="text/javascript">
 					function toggle_visibility(id, elm) {
 					var e =
@@ -39,6 +39,19 @@
 					e[i].style.display = 'none';
 					}
 					};
+
+					function fi(id) {
+					var div =
+					document.getElementById(id);
+					if (div.style.display !== 'none') {
+					document.getElementById("btn").childNodes[0].nodeValue = "View";
+					div.style.display = 'none';
+					}
+					else {
+					document.getElementById("btn").childNodes[0].nodeValue = "Hide";
+					div.style.display = '';
+					}
+					};
 				</script>
 			</head>
 			<body>
@@ -53,15 +66,16 @@
 				cellspacing="1" cellpadding="10">
 				<tbody class="cf-tbody">
 					<tr>
-						<td>
+						<td class="row1 border_right">
 							<span class="maintitle">Message Validation Report</span>
 						</td>
-						<td align="right" style="font-weight:bold">
-							Date:
-							<xsl:call-template name="dateTransformer">
-								<xsl:with-param name="myDate" select="message:DateOfTest" />
-								<xsl:with-param name="myTime" select="message:TimeOfTest" />
-							</xsl:call-template>
+						<td class="row2" style="font-weight:bold">
+							<center>
+								<xsl:call-template name="dateTransformer">
+									<xsl:with-param name="myDate" select="message:DateOfTest" />
+									<xsl:with-param name="myTime" select="message:TimeOfTest" />
+								</xsl:call-template>
+							</center>
 						</td>
 					</tr>
 				</tbody>
@@ -74,7 +88,9 @@
 					<tr>
 						<td class="row1 border_right">Validation Type</td>
 						<td class="row2">
-							<xsl:value-of select="message:Type" />
+							<center>
+								<xsl:value-of select="message:Type" />
+							</center>
 						</td>
 					</tr>
 				</tbody>
@@ -92,7 +108,7 @@
 						</td>
 					</tr>
 					<tr class="border_bottom">
-						<td class="row2 border_right ">Version</td>
+						<td class="row2 border_right ">Validation Version</td>
 						<td class="row3 ">
 							<xsl:value-of select="message:ServiceVersion" />
 						</td>
@@ -100,6 +116,7 @@
 				</tbody>
 			</table>
 		</div>
+		<xsl:apply-templates select="message:TestCaseReference" />
 	</xsl:template>
 	<xsl:template match="report:SpecificReport">
 		<xsl:apply-templates select="report:MetaData/report:Profile" />
@@ -125,7 +142,7 @@
 			<xsl:with-param name="classification" select="'warning'" />
 			<xsl:with-param name="count"
 				select="../report:HeaderReport/message:WarningCount" />
-			<xsl:with-param name="color" select="'gold'" />
+			<xsl:with-param name="color" select="'FF9933'" />
 			<xsl:with-param name="msg" select="'Warnings'" />
 		</xsl:call-template>
 		<xsl:call-template name="Assertions">
@@ -163,7 +180,7 @@
 							</xsl:attribute>
 							Count :
 							<xsl:value-of select="$count" />
-							<input type="checkbox">
+							<input type="checkbox" style="margin-left : 10px;">
 								<xsl:attribute name="onclick">toggle_visibility('<xsl:value-of
 									select="$classification" />',this)</xsl:attribute>
 								<xsl:if test="$classification='error'">
@@ -196,7 +213,7 @@
 				<td class="row5 border_bottom" align="right">
 					Count :
 					<xsl:value-of select="count(key('categs',concat(@Type,'+',@Result)))" />
-					<input type="checkbox" checked="true">
+					<input type="checkbox" checked="true" style="margin-left : 10px;">
 						<xsl:attribute name="onclick">toggle_visibilityC('<xsl:value-of
 							select="@Result" /><xsl:value-of select="@Type" />',this)</xsl:attribute>
 					</input>
@@ -254,13 +271,47 @@
 		</xsl:for-each>
 
 	</xsl:template>
+	<xsl:template match="report:HeaderReport/message:TestCaseReference">
+		<div class="report-section">
+			<table class="forumline" width="100%" cellspacing="1"
+				cellpadding="2">
+				<tbody>
+					<tr class="border_bottom">
+						<td class="row1 border_right" valign="top" rowspan="4">Test Case</td>
+						<td class="row2 border_right dark-gray">Test Plan</td>
+						<td class="row3 ">
+							<xsl:value-of select="report:TestPlan" />
+						</td>
+					</tr>
+					<tr class="border_bottom">
+						<td class="row2 border_right dark-gray">Test Group</td>
+						<td class="row3 ">
+							<xsl:value-of select="report:TestGroup" />
+						</td>
+					</tr>
+					<tr class="border_bottom">
+						<td class="row2 border_right dark-gray">Test Case</td>
+						<td class="row3">
+							<xsl:value-of select="report:TestCase" />
+						</td>
+					</tr>
+					<tr class="border_bottom">
+						<td class="row2 border_right dark-gray">Test Step</td>
+						<td class="row3">
+							<xsl:value-of select="report:TestStep" />
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</xsl:template>
 	<xsl:template match="report:MetaData/report:Profile">
 		<div class="report-section">
 			<table class="forumline" width="100%" cellspacing="1"
 				cellpadding="2">
 				<tbody>
 					<tr class="border_bottom">
-						<td class="row1 border_right" valign="top" rowspan="6">Profile</td>
+						<td class="row1 border_right" valign="top" rowspan="7">Profile</td>
 						<td class="row2 border_right dark-gray">Name</td>
 						<td class="row3 ">
 							<xsl:value-of select="@Name" />
@@ -276,6 +327,12 @@
 						<td class="row2 border_right dark-gray">Type</td>
 						<td class="row3">
 							<xsl:value-of select="@Type" />
+						</td>
+					</tr>
+					<tr class="border_bottom">
+						<td class="row2 border_right dark-gray">Message Type</td>
+						<td class="row3">
+							<xsl:value-of select="@MessageType" />
 						</td>
 					</tr>
 					<tr class="border_bottom">
@@ -337,28 +394,31 @@
 					<tr class="border_bottom">
 						<td class="row6 " style="color: red; font-weight: bold">
 							<input checked="true" type="checkbox"
-								onclick="toggle_visibility('error',this)" />
+								onclick="toggle_visibility('error',this)" style="margin-left : 10px;" />
 							<xsl:value-of select="../report:HeaderReport/message:ErrorCount" />
 							Errors
 						</td>
 					</tr>
 					<tr class="border_bottom">
 						<td class="row6 " style="color: maroon; font-weight: bold">
-							<input type="checkbox" onclick="toggle_visibility('alert',this)" />
+							<input type="checkbox" onclick="toggle_visibility('alert',this)"
+								style="margin-left : 10px;" />
 							<xsl:value-of select="../report:HeaderReport/message:AlertCount" />
 							Alerts
 						</td>
 					</tr>
 					<tr class="border_bottom">
-						<td class="row6 " style="color: gold; font-weight: bold">
-							<input type="checkbox" onclick="toggle_visibility('warning',this)" />
+						<td class="row6 " style="color: FF9933; font-weight: bold">
+							<input type="checkbox" onclick="toggle_visibility('warning',this)"
+								style="margin-left : 10px;" />
 							<xsl:value-of select="../report:HeaderReport/message:WarningCount" />
 							Warnings
 						</td>
 					</tr>
 					<tr class="border_bottom">
 						<td class="row6" style="color: green; font-weight: bold">
-							<input type="checkbox" onclick="toggle_visibility('affirmative',this)" />
+							<input type="checkbox" onclick="toggle_visibility('affirmative',this)"
+								style="margin-left : 10px;" />
 							<xsl:value-of select="../report:HeaderReport/message:AffirmCount" />
 							Affirmatives
 						</td>
@@ -376,7 +436,7 @@
 					<th style="border-bottom:2pt #005C99 solid" align="left">Failures
 						interpretation</th>
 					<td align="right" style="border-bottom:2pt #005C99 solid">
-						<input type="checkbox" onclick="toggle_visibility('mfi',this)" />
+						<button id="btn" onclick="fi('mfi')"> View </button>
 					</td>
 				</tr>
 				<tbody id="mfi" style="display : none;">
@@ -408,13 +468,51 @@
 			select="substring-before(substring-after($myDate, '-'), '-')" />
 		<xsl:variable name="day"
 			select="substring-before(substring-after(substring-after($myDate, '-'), '-'), '-')" />
-		<xsl:value-of select="$month" />
+		<xsl:choose>
+			<xsl:when test="$month = 1">
+				<xsl:text>January</xsl:text>
+			</xsl:when>
+			<xsl:when test="$month = 2">
+				<xsl:text>February</xsl:text>
+			</xsl:when>
+			<xsl:when test="$month = 3">
+				<xsl:text>March</xsl:text>
+			</xsl:when>
+			<xsl:when test="$month = 4">
+				<xsl:text>April</xsl:text>
+			</xsl:when>
+			<xsl:when test="$month = 5">
+				<xsl:text>May</xsl:text>
+			</xsl:when>
+			<xsl:when test="$month = 6">
+				<xsl:text>June</xsl:text>
+			</xsl:when>
+			<xsl:when test="$month = 7">
+				<xsl:text>July</xsl:text>
+			</xsl:when>
+			<xsl:when test="$month = 8">
+				<xsl:text>August</xsl:text>
+			</xsl:when>
+			<xsl:when test="$month = 9">
+				<xsl:text>September</xsl:text>
+			</xsl:when>
+			<xsl:when test="$month = 10">
+				<xsl:text>October</xsl:text>
+			</xsl:when>
+			<xsl:when test="$month = 11">
+				<xsl:text>November</xsl:text>
+			</xsl:when>
+			<xsl:when test="$month = 12">
+				<xsl:text>December</xsl:text>
+			</xsl:when>
+		</xsl:choose>
+
+		<!-- <xsl:value-of select="$month" /> -->
 		<xsl:text> </xsl:text>
 		<xsl:value-of select="$day" />
-		<xsl:text> </xsl:text>
-		<xsl:text> </xsl:text>
-		<xsl:value-of select="$year" />
 		<xsl:text>, </xsl:text>
+		<xsl:value-of select="$year" />
+		<xsl:text> at </xsl:text>
 		<xsl:value-of select="$myTime" />
 	</xsl:template>
 </xsl:stylesheet>
