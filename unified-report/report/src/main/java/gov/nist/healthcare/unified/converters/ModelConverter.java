@@ -32,7 +32,7 @@ public class ModelConverter implements Converter {
 				md.setValidationType(ref.value);
 			if (s.accessPrimitive("metaData.service.name", ref))
 				md.setServiceName(ref.value);
-			if (s.accessPrimitive("metaData.service.version", ref))
+			if (s.accessPrimitive("metaData.service.validationVersion", ref))
 				md.setServiceVersion(ref.value);
 			if (s.accessPrimitive("metaData.service.provider", ref))
 				md.setServiceProvider(ref.value);
@@ -44,8 +44,16 @@ public class ModelConverter implements Converter {
 				md.setProfileName(ref.value);
 			if (s.accessPrimitive("metaData.profile.type", ref))
 				md.setProfileType(ref.value);
-			if (s.accessPrimitive("metaData.profile.standard", ref))
-				md.setProfileStandard(ref.value);
+			if (s.accessPrimitive("metaData.profile.specification", ref))
+				md.setProfileSpecification(ref.value);
+			if (s.accessPrimitive("metaData.profile.identifier", ref))
+				md.setProfileIdentifier(ref.value);
+			if (s.accessPrimitive("metaData.profile.hl7version", ref))
+				md.setProfileHL7Version(ref.value);
+			if (s.accessPrimitive("metaData.profile.date", ref))
+				md.setProfileDate(ref.value);
+			if (s.accessPrimitive("metaData.profile.messageType", ref))
+				md.setProfileMessageType(ref.value);
 			if (s.accessPrimitive("metaData.counts.affirmative", ref))
 				md.setAffirmativesCount(Int(ref.value));
 			if (s.accessPrimitive("metaData.counts.alert", ref))

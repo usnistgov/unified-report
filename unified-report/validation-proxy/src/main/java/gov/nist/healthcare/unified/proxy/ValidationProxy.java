@@ -4,6 +4,7 @@ package gov.nist.healthcare.unified.proxy;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 import validator.Util;
 import validator.Validation;
@@ -19,11 +20,11 @@ import hl7.v2.validation.vs.ValueSetLibrary;
 public class ValidationProxy {
 
 	private Section service;
-	public ValidationProxy(String serName,String serProvider,String serVersion){
+	public ValidationProxy(String serName,String serProvider){
 		service = new Section("service");
 		service.put("name", serName);
 		service.put("provider", serProvider);
-		service.put("version", serVersion);
+		service.put("validationVersion", buildinfo.Info.version());
 	}
 	
 	public EnhancedReport validate(String msg,String profile,String constraints,String vs,String id,Context context){
@@ -33,8 +34,10 @@ public class ValidationProxy {
 			String pr = Util.streamAsString(profile);
 			Report r = Validation.validate(profile, constraints, vs, content,id);
 			String ctx = "";
+			ArrayList<Section> mds = new ArrayList<Section>();
+			mds.add(service);
 			if(context == Context.Free) ctx = "Context-Free"; else ctx = "Context-Based";
-			return EnhancedReport.fromValidation(r, content, pr, id, service,ctx);
+			return EnhancedReport.fromValidation(r, content, pr, id,mds,ctx);
 		
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -49,7 +52,9 @@ public class ValidationProxy {
 			String pr = Util.streamAsString(profile);
 			String ctx = "";
 			if(context == Context.Free) ctx = "Context-Free"; else ctx = "Context-Based";
-			return EnhancedReport.fromValidation(r, content, pr, id, service,ctx);
+			ArrayList<Section> mds = new ArrayList<Section>();
+			mds.add(service);
+			return EnhancedReport.fromValidation(r, content, pr, id, mds,ctx);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -74,7 +79,9 @@ public class ValidationProxy {
 			String pr = profile;
 			String ctx = "";
 			if(context == Context.Free) ctx = "Context-Free"; else ctx = "Context-Based";
-			return EnhancedReport.fromValidation(r, content, pr, id, service,ctx);
+			ArrayList<Section> mds = new ArrayList<Section>();
+			mds.add(service);
+			return EnhancedReport.fromValidation(r, content, pr, id, mds,ctx);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

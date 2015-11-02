@@ -8,8 +8,12 @@
 
 package gov.nist.healthcare.unified.validation.message;
 
+
+import gov.nist.healthcare.unified.validation.message.hl7.v2.report.TestCaseReference;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -133,7 +137,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "alertCount",
     "reportIntegrityIndicator",
     "reportIntegrityObject",
-    "testObject"
+    "testObject",
+    "testCaseReference"
 })
 public class ReportHeader {
 
@@ -199,8 +204,18 @@ public class ReportHeader {
     protected String reportIntegrityObject;
     @XmlElement(name = "TestObject")
     protected String testObject;
+    @XmlElement(name = "TestCaseReference", required = false)
+    protected TestCaseReference testCaseReference;
 
-    /**
+    public TestCaseReference getTestCaseReference() {
+		return testCaseReference;
+	}
+
+	public void setTestCaseReference(TestCaseReference testCase) {
+		this.testCaseReference = testCase;
+	}
+
+	/**
      * Gets the value of the validationStatus property.
      * 
      * @return

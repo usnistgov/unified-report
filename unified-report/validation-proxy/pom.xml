@@ -4,14 +4,14 @@
 	<parent>
 		<groupId>gov.nist.healthcare.hl7.v2.unifiedreport</groupId>
 		<artifactId>unified-report</artifactId>
-		<version>0.0.4-SNAPSHOT</version>
+		<version>0.0.6-SNAPSHOT</version>
 	</parent>
 	<artifactId>validation-proxy</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>gov.nist.healthcare.hl7.v2.unifiedreport</groupId>
 			<artifactId>report</artifactId>
-			<version>0.0.4-SNAPSHOT</version>
+			<version>0.0.6-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>

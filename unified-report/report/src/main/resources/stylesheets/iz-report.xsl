@@ -142,7 +142,7 @@
 			<xsl:with-param name="classification" select="'warning'" />
 			<xsl:with-param name="count"
 				select="../report:HeaderReport/message:WarningCount" />
-			<xsl:with-param name="color" select="'FF9933'" />
+			<xsl:with-param name="color" select="'#FF9933'" />
 			<xsl:with-param name="msg" select="'Warnings'" />
 		</xsl:call-template>
 		<xsl:call-template name="Assertions">
@@ -311,7 +311,13 @@
 				cellpadding="2">
 				<tbody>
 					<tr class="border_bottom">
-						<td class="row1 border_right" valign="top" rowspan="7">Profile</td>
+						<td class="row1 border_right" valign="top" rowspan="9">Profile</td>
+						<td class="row2 border_right dark-gray">Identifier</td>
+						<td class="row3 ">
+							<xsl:value-of select="@Identifier" />
+						</td>
+					</tr>
+					<tr class="border_bottom">
 						<td class="row2 border_right dark-gray">Name</td>
 						<td class="row3 ">
 							<xsl:value-of select="@Name" />
@@ -336,19 +342,25 @@
 						</td>
 					</tr>
 					<tr class="border_bottom">
-						<td class="row2 border_right dark-gray">Profile Version</td>
+						<td class="row2 border_right dark-gray">XML Version</td>
 						<td class="row3 ">
 							<xsl:value-of select="@Version" />
 						</td>
 					</tr>
 					<tr class="border_bottom">
-						<td class="row2 border_right dark-gray">Profile Date</td>
+						<td class="row2 border_right dark-gray">XML Date</td>
 						<td class="row3 ">
 							<xsl:value-of select="@Date" />
 						</td>
 					</tr>
 					<tr class="border_bottom">
-						<td class="row2 border_right dark-gray">Standard</td>
+						<td class="row2 border_right dark-gray">Specification</td>
+						<td class="row3 ">
+							<xsl:value-of select="@Specification" />
+						</td>
+					</tr>
+					<tr class="border_bottom">
+						<td class="row2 border_right dark-gray">HL7 Version</td>
 						<td class="row3 ">
 							<xsl:value-of select="@HL7Version" />
 						</td>
@@ -408,7 +420,7 @@
 						</td>
 					</tr>
 					<tr class="border_bottom">
-						<td class="row6 " style="color: FF9933; font-weight: bold">
+						<td class="row6 " style="color: #FF9933; font-weight: bold">
 							<input type="checkbox" onclick="toggle_visibility('warning',this)"
 								style="margin-left : 10px;" />
 							<xsl:value-of select="../report:HeaderReport/message:WarningCount" />

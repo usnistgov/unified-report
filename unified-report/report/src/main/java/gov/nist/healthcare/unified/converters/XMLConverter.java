@@ -37,6 +37,7 @@ import gov.nist.healthcare.unified.validation.message.hl7.v2.report.HL7V2Message
 import gov.nist.healthcare.unified.validation.message.hl7.v2.report.HL7V2MessageValidationReport;
 import gov.nist.healthcare.unified.validation.message.hl7.v2.report.Reasons;
 import gov.nist.healthcare.unified.validation.message.hl7.v2.report.StackTrace;
+import gov.nist.healthcare.unified.validation.message.hl7.v2.report.TestCaseReference;
 import gov.nist.healthcare.unified.validation.message.hl7.v2.report.TraceElement;
 import gov.nist.healthcare.unified.validation.metadata.MetaData;
 import gov.nist.healthcare.unified.validation.metadata.Reference;
@@ -54,7 +55,8 @@ public class XMLConverter implements Converter {
 			HL7V2MessageValidationContextDefinition ctx = new HL7V2MessageValidationContextDefinition();
 			HL7V2MessageReport.MetaData.Message msg = new HL7V2MessageReport.MetaData.Message();
 			HL7V2MessageReport.MetaData.Profile profile = new HL7V2MessageReport.MetaData.Profile();
-
+			TestCaseReference ref = new TestCaseReference();
+			
 			Section cursor = new Section("");
 			StringRef tmp = new StringRef();
 
@@ -87,10 +89,22 @@ public class XMLConverter implements Converter {
 						rh.setServiceName(tmp.toString());
 					if (cursor.accessPrimitive("provider", tmp))
 						rh.setServiceProvider(tmp.toString());
-					if (cursor.accessPrimitive("version", tmp))
+					if (cursor.accessPrimitive("validationVersion", tmp))
 						rh.setServiceVersion(tmp.toString());
 				}
-
+				
+				if (mds.accessComplex("testCase", cursor)) {
+					if (cursor.accessPrimitive("plan", tmp))
+						ref.setTestPlan(tmp.toString());
+					if (cursor.accessPrimitive("group", tmp))
+						ref.setTestGroup(tmp.toString());
+					if (cursor.accessPrimitive("case", tmp))
+						ref.setTestCase(tmp.toString());
+					if (cursor.accessPrimitive("step", tmp))
+						ref.setTestStep(tmp.toString());
+					rh.setTestCaseReference(ref);
+				}
+				
 				if (mds.accessComplex("profile", cursor)) {
 					if (cursor.accessPrimitive("name", tmp))
 						profile.setName(tmp.toString());
@@ -100,8 +114,16 @@ public class XMLConverter implements Converter {
 						profile.setVersion(tmp.toString());
 					if (cursor.accessPrimitive("type", tmp))
 						profile.setType(tmp.toString());
-					if (cursor.accessPrimitive("standard", tmp))
+					if (cursor.accessPrimitive("hl7version", tmp))
 						profile.setHL7Version(tmp.toString());
+					if (cursor.accessPrimitive("messageType", tmp))
+						profile.setMessageType(tmp.toString());
+					if (cursor.accessPrimitive("date", tmp))
+						profile.setDate(tmp.toString());
+					if (cursor.accessPrimitive("identifier", tmp))
+						profile.setIdentifier(tmp.toString());
+					if (cursor.accessPrimitive("specification", tmp))
+						profile.setSpecification(tmp.toString());
 				}
 
 				if (mds.accessComplex("counts", cursor)) {
@@ -139,6 +161,7 @@ public class XMLConverter implements Converter {
 			rep.setAssertionList(getAssertions(s.getDetections()));
 			
 			rep.setMetaData(md);
+
 			mvr.setSpecificReport(rep);
 			mvr.setHeaderReport(rh);
 
@@ -292,7 +315,11 @@ public class XMLConverter implements Converter {
 						.put("orgName", profile.getOrganization())
 						.put("version", profile.getVersion())
 						.put("type", profile.getType())
-						.put("standard", profile.getHL7Version());
+						.put("hl7version", profile.getHL7Version())
+						.put("messageType",profile.getMessageType())
+						.put("date", profile.getDate())
+						.put("specification", profile.getSpecification())
+						.put("identifier", profile.getIdentifier());
 				metadata.put(tmp);
 			}
 
@@ -307,7 +334,7 @@ public class XMLConverter implements Converter {
 				tmp = new Section("service");
 				tmp.put("name", rh.getServiceName())
 						.put("provider", rh.getServiceProvider())
-						.put("version", rh.getServiceVersion());
+						.put("validationVersion", rh.getServiceVersion());
 				metadata.put(tmp);
 				tmp = new Section("counts");
 				tmp.put("affirmative", Int(rh.getAffirmCount()))
@@ -316,7 +343,15 @@ public class XMLConverter implements Converter {
 						.put("warning", Int(rh.getWarningCount()))
 						.put("informational", Int(rh.getInfoCount()));
 				metadata.put(tmp);
-
+				if(rh.getTestCaseReference() != null){
+					tmp = new Section("testCase");
+					tmp.put("plan", rh.getTestCaseReference().getTestPlan())
+							.put("group", rh.getTestCaseReference().getTestGroup())
+							.put("case", rh.getTestCaseReference().getTestCase())
+							.put("step", rh.getTestCaseReference().getTestStep());
+					metadata.put(tmp);
+				}
+				
 				metadata.put("standardType", rh.getStandardType().value());
 				metadata.put("validationType", rh.getValidationType().value());
 				metadata.put("type",rh.getType());
