@@ -23,6 +23,8 @@ import scala.collection.immutable.Map$;
 import expression.EvalResult;
 import expression.Plugin;
 
+import javax.xml.validation.Schema;
+
 public class Validation {
 	
 	public static Report validate(String profile,String constraint,String vs,String message,String id) throws Exception{
@@ -45,6 +47,10 @@ public class Validation {
 	
 	public static Report validate(Profile profile,ConformanceContext constraint,ValueSetLibrary vs,String message,String id) throws Exception{	
 		return new SyncNCPDPValidator(profile, vs, constraint).check(message, id);
+	}
+	
+	public static Report validate(String xmlFile, Schema schema, List<String> schematrons, String skeleton, String phase){
+		return gov.nist.erx.xml.Validator.validate(xmlFile,schema,schematrons,skeleton,phase);
 	}
 	
 //	public static Report validate(){
