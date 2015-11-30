@@ -27,9 +27,8 @@ public class ValidationProxy {
 		service.put("validationVersion", buildinfo.Info.version());
 	}
 	
-	public EnhancedReport validate(String msg,String profile,String constraints,String vs,String id,Context context){
-		try {
-		
+	public EnhancedReport validate(String msg,String profile,String constraints,String vs,String id,Context context) throws Exception{
+	
 			String content = Util.streamAsString(msg);
 			String pr = Util.streamAsString(profile);
 			Report r = Validation.validate(profile, constraints, vs, content,id);
@@ -39,14 +38,11 @@ public class ValidationProxy {
 			if(context == Context.Free) ctx = "Context-Free"; else ctx = "Context-Based";
 			return EnhancedReport.fromValidation(r, content, pr, id,mds,ctx);
 		
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+
 	}
 	
-	public EnhancedReport validateContent(String content,String profile,String constraints,String vs,String id,Context context){
-		try {
+	public EnhancedReport validateContent(String content,String profile,String constraints,String vs,String id,Context context) throws Exception{
+
 		
 			Report r = Validation.validate(profile, constraints, vs, content,id);
 			String pr = Util.streamAsString(profile);
@@ -55,11 +51,7 @@ public class ValidationProxy {
 			ArrayList<Section> mds = new ArrayList<Section>();
 			mds.add(service);
 			return EnhancedReport.fromValidation(r, content, pr, id, mds,ctx);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+
 	}
 	/**
 	 * @param content Message content
@@ -68,10 +60,10 @@ public class ValidationProxy {
 	 * @param vs ValueSetsLibrary Object
 	 * @param id Message id
 	 * @param context Context Free or Context Based 
+	 * @throws Exception 
 	 */
-	public EnhancedReport validate(String content,String profile,ConformanceContext constraints,ValueSetLibrary vs,String id,Context context){
-		try {
-		
+	public EnhancedReport validate(String content,String profile,ConformanceContext constraints,ValueSetLibrary vs,String id,Context context) throws Exception{
+
 			InputStream stream = new ByteArrayInputStream(profile.getBytes(StandardCharsets.UTF_8));
 			Profile profileX = XMLDeserializer.deserialize(stream).get();
 
@@ -82,11 +74,7 @@ public class ValidationProxy {
 			ArrayList<Section> mds = new ArrayList<Section>();
 			mds.add(service);
 			return EnhancedReport.fromValidation(r, content, pr, id, mds,ctx);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+
 	}
 
 	

@@ -12,6 +12,7 @@
 	<xsl:key name="categs"
 		match="/report:HL7V2MessageValidationReport/report:SpecificReport/report:AssertionList/report:Assertion"
 		use="concat(@Type,'+',@Result)" />
+	<xsl:param name="excluded" />
 	<xsl:variable name="smallcase" select="'abcdefghijklmnopqrstuvwxyz'" />
 	<xsl:variable name="uppercase" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'" />
 	<xsl:template match="/report:HL7V2MessageValidationReport">
@@ -164,45 +165,48 @@
 		<xsl:param name="count" />
 		<xsl:param name="color" />
 		<xsl:param name="msg" />
-		<div class="report-section">
-			<table class="forumline" width="100%" cellspacing="1"
-				cellpadding="2">
-				<tbody>
-					<tr class="row1">
-						<td>
-							Validation
-							<xsl:value-of select="$msg" />
-						</td>
-						<td align="right">
-							<xsl:attribute name="style">
+		<xsl:if test="$excluded != $classification">
+			<div class="report-section">
+				<table class="forumline" width="100%" cellspacing="1"
+					cellpadding="2">
+					<tbody>
+						<tr class="row1">
+							<td>
+								Validation
+								<xsl:value-of select="$msg" />
+							</td>
+							<td align="right">
+								<xsl:attribute name="style">
 								color : <xsl:value-of select='$color' />;
 								font-weight: bold;
 							</xsl:attribute>
-							Count :
-							<xsl:value-of select="$count" />
-							<input type="checkbox" style="margin-left : 10px;">
-								<xsl:attribute name="onclick">toggle_visibility('<xsl:value-of
-									select="$classification" />',this)</xsl:attribute>
-								<xsl:if test="$classification='error'">
-									<xsl:attribute name="checked">true</xsl:attribute>
-								</xsl:if>
-							</input>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<table class="forumline cf-report-category" width="100%"
-				cellspacing="1" cellpadding="2">
+								Count :
+								<xsl:value-of select="$count" />
+								<input type="checkbox" style="margin-left : 10px;">
+									<xsl:attribute name="onclick">toggle_visibility('<xsl:value-of
+										select="$classification" />',this)</xsl:attribute>
+									<xsl:if test="$classification='error'">
+										<xsl:attribute name="checked">true</xsl:attribute>
+									</xsl:if>
+								</input>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<table class="forumline cf-report-category" width="100%"
+					cellspacing="1" cellpadding="2">
 
-				<xsl:if test="$classification!='error'">
-					<xsl:attribute name="style">display : none;</xsl:attribute>
-				</xsl:if>
+					<xsl:if test="$classification!='error'">
+						<xsl:attribute name="style">display : none;</xsl:attribute>
+					</xsl:if>
 
-				<xsl:attribute name="id"><xsl:value-of select='$classification' /></xsl:attribute>
-				<xsl:apply-templates
-					select="./report:AssertionList/report:Assertion[@Result = $classification][generate-id(.)=generate-id(key('categs',concat(@Type,'+',@Result))[1])]" />
-			</table>
-		</div>
+					<xsl:attribute name="id"><xsl:value-of
+						select='$classification' /></xsl:attribute>
+					<xsl:apply-templates
+						select="./report:AssertionList/report:Assertion[@Result = $classification][generate-id(.)=generate-id(key('categs',concat(@Type,'+',@Result))[1])]" />
+				</table>
+			</div>
+		</xsl:if>
 	</xsl:template>
 	<xsl:template match="report:AssertionList/report:Assertion">
 		<tbody>
@@ -405,34 +409,54 @@
 					</tr>
 					<tr class="border_bottom">
 						<td class="row6 " style="color: red; font-weight: bold">
-							<input checked="true" type="checkbox"
-								onclick="toggle_visibility('error',this)" style="margin-left : 10px;" />
+							<xsl:if test="$excluded != 'error'">
+								<input checked="true" type="checkbox"
+									onclick="toggle_visibility('error',this)" style="margin-left : 10px;" />
+							</xsl:if>
 							<xsl:value-of select="../report:HeaderReport/message:ErrorCount" />
 							Errors
+							<xsl:if test="$excluded = 'error'">
+								(details not included)
+							</xsl:if>
 						</td>
 					</tr>
 					<tr class="border_bottom">
 						<td class="row6 " style="color: maroon; font-weight: bold">
-							<input type="checkbox" onclick="toggle_visibility('alert',this)"
-								style="margin-left : 10px;" />
+							<xsl:if test="$excluded != 'alert'">
+								<input type="checkbox" onclick="toggle_visibility('alert',this)"
+									style="margin-left : 10px;" />
+							</xsl:if>
 							<xsl:value-of select="../report:HeaderReport/message:AlertCount" />
 							Alerts
+							<xsl:if test="$excluded = 'alert'">
+								(details not included)
+							</xsl:if>
 						</td>
 					</tr>
 					<tr class="border_bottom">
 						<td class="row6 " style="color: #FF9933; font-weight: bold">
-							<input type="checkbox" onclick="toggle_visibility('warning',this)"
-								style="margin-left : 10px;" />
+							<xsl:if test="$excluded != 'warning'">
+								<input type="checkbox" onclick="toggle_visibility('warning',this)"
+									style="margin-left : 10px;" />
+							</xsl:if>
 							<xsl:value-of select="../report:HeaderReport/message:WarningCount" />
 							Warnings
+							<xsl:if test="$excluded = 'warning'">
+								(details not included)
+							</xsl:if>
 						</td>
 					</tr>
 					<tr class="border_bottom">
 						<td class="row6" style="color: green; font-weight: bold">
-							<input type="checkbox" onclick="toggle_visibility('affirmative',this)"
-								style="margin-left : 10px;" />
+							<xsl:if test="$excluded != 'affirmative'">
+								<input type="checkbox" onclick="toggle_visibility('affirmative',this)"
+									style="margin-left : 10px;" />
+							</xsl:if>
 							<xsl:value-of select="../report:HeaderReport/message:AffirmCount" />
 							Affirmatives
+							<xsl:if test="$excluded = 'affirmative'">
+								(details not included)
+							</xsl:if>
 						</td>
 					</tr>
 				</tbody>
