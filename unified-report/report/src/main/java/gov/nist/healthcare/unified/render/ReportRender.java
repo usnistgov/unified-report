@@ -31,6 +31,9 @@ public class ReportRender implements Render {
 		try {
 			transformer = tFactory.newTransformer(new StreamSource(this
 					.getClass().getResourceAsStream("/stylesheets/"+this.getName()+".xsl")));
+			if(params != null && params.has("excluded")){
+				transformer.setParameter("excluded", params.getString("excluded"));
+			}
 			transformer.transform(new StreamSource(is), new StreamResult(os));
 			String result = os.toString();
 			if(params != null){

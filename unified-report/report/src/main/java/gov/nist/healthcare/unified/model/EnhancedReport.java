@@ -38,10 +38,10 @@ public class EnhancedReport implements AccessibleObject {
 	}
 
 	public static EnhancedReport fromValidation(Report r, String message,
-			String profile, String id, Section service, String context) {
+			String profile, String id, ArrayList<Section> mds, String context) {
 		EnhancedReport rp = new EnhancedReport();
-		if (service.getName().equals("service"))
-			EnhancerH.enhanceHeader(rp, service, message);
+		if (mds != null)
+			EnhancerH.enhanceHeader(rp, mds, message);
 		else
 			EnhancerH.enhanceHeader(rp, message);
 
@@ -58,6 +58,13 @@ public class EnhancedReport implements AccessibleObject {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void setTestCase(String testPlan,String testGroup,String testCase, String testStep){
+		this.metadata.put("testCase.plan", testPlan);
+		this.metadata.put("testCase.group", testGroup);
+		this.metadata.put("testCase.case", testCase);
+		this.metadata.put("testCase.step", testStep);
 	}
 
 	public static EnhancedReport from(String format, String content)

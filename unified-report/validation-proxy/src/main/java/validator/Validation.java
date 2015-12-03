@@ -35,7 +35,6 @@ public class Validation {
 		Profile is_pro = getProfile(profile);
 		
 		ConformanceContext is_cons = getConformanceContext(constraint);
-
 		ValueSetLibrary is_vs = getValueSetLibrary(vs);
 		
 //		ConformanceContext c = DefaultConformanceContext.apply(is_cons).get();

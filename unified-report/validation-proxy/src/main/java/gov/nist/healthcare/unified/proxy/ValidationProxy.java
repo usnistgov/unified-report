@@ -4,6 +4,7 @@ package gov.nist.healthcare.unified.proxy;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 import validator.Util;
 import validator.Validation;
@@ -19,42 +20,38 @@ import hl7.v2.validation.vs.ValueSetLibrary;
 public class ValidationProxy {
 
 	private Section service;
-	public ValidationProxy(String serName,String serProvider,String serVersion){
+	public ValidationProxy(String serName,String serProvider){
 		service = new Section("service");
 		service.put("name", serName);
 		service.put("provider", serProvider);
-		service.put("version", serVersion);
+		service.put("validationVersion", buildinfo.Info.version());
 	}
 	
-	public EnhancedReport validate(String msg,String profile,String constraints,String vs,String id,Context context){
-		try {
-		
+	public EnhancedReport validate(String msg,String profile,String constraints,String vs,String id,Context context) throws Exception{
+	
 			String content = Util.streamAsString(msg);
 			String pr = Util.streamAsString(profile);
 			Report r = Validation.validate(profile, constraints, vs, content,id);
 			String ctx = "";
+			ArrayList<Section> mds = new ArrayList<Section>();
+			mds.add(service);
 			if(context == Context.Free) ctx = "Context-Free"; else ctx = "Context-Based";
-			return EnhancedReport.fromValidation(r, content, pr, id, service,ctx);
+			return EnhancedReport.fromValidation(r, content, pr, id,mds,ctx);
 		
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+
 	}
 	
-	public EnhancedReport validateContent(String content,String profile,String constraints,String vs,String id,Context context){
-		try {
+	public EnhancedReport validateContent(String content,String profile,String constraints,String vs,String id,Context context) throws Exception{
+
 		
 			Report r = Validation.validate(profile, constraints, vs, content,id);
 			String pr = Util.streamAsString(profile);
 			String ctx = "";
 			if(context == Context.Free) ctx = "Context-Free"; else ctx = "Context-Based";
-			return EnhancedReport.fromValidation(r, content, pr, id, service,ctx);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+			ArrayList<Section> mds = new ArrayList<Section>();
+			mds.add(service);
+			return EnhancedReport.fromValidation(r, content, pr, id, mds,ctx);
+
 	}
 	/**
 	 * @param content Message content
@@ -63,10 +60,10 @@ public class ValidationProxy {
 	 * @param vs ValueSetsLibrary Object
 	 * @param id Message id
 	 * @param context Context Free or Context Based 
+	 * @throws Exception 
 	 */
-	public EnhancedReport validate(String content,String profile,ConformanceContext constraints,ValueSetLibrary vs,String id,Context context){
-		try {
-		
+	public EnhancedReport validate(String content,String profile,ConformanceContext constraints,ValueSetLibrary vs,String id,Context context) throws Exception{
+
 			InputStream stream = new ByteArrayInputStream(profile.getBytes(StandardCharsets.UTF_8));
 			Profile profileX = XMLDeserializer.deserialize(stream).get();
 
@@ -74,12 +71,10 @@ public class ValidationProxy {
 			String pr = profile;
 			String ctx = "";
 			if(context == Context.Free) ctx = "Context-Free"; else ctx = "Context-Based";
-			return EnhancedReport.fromValidation(r, content, pr, id, service,ctx);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+			ArrayList<Section> mds = new ArrayList<Section>();
+			mds.add(service);
+			return EnhancedReport.fromValidation(r, content, pr, id, mds,ctx);
+
 	}
 
 	
