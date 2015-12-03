@@ -17,11 +17,11 @@ public class XMLValidationProxy {
 
     private Section service;
 
-    public XMLValidationProxy(String serName, String serProvider, String serVersion) {
+    public XMLValidationProxy(String serName, String serProvider) {
         service = new Section("service");
         service.put("name", serName);
         service.put("provider", serProvider);
-        service.put("version", serVersion);
+        service.put("validationVersion", buildinfo.Info.version());
     }
 
     public EnhancedReport validate(String msg, Schema schema, List<String> schematrons, String skeleton, String phase, Context context) {
@@ -32,7 +32,9 @@ public class XMLValidationProxy {
             if (context == Context.Free) ctx = "Context-Free";
             else ctx = "Context-Based";
             EnhancedReport enhancedReport = new EnhancedReport();
-            EnhancerH.enhanceHeader(enhancedReport, service, msg);
+            ArrayList<Section> mds = new ArrayList<Section>();
+            mds.add(service);
+            EnhancerH.enhanceHeader(enhancedReport, mds, msg);
             EnhancerH.enhanceWithReport(enhancedReport, validationReport);
             return enhancedReport;
         } catch (Exception e) {
