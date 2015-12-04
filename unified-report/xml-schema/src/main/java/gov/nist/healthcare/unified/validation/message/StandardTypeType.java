@@ -39,7 +39,8 @@ public enum StandardTypeType {
     @XmlEnumValue("HL7 V3")
     HL_7_V_3("HL7 V3"),
     CDA("CDA"),
-    DICOM("DICOM");
+    DICOM("DICOM"),
+    NCPDP("NCPDP");
     private final String value;
 
     StandardTypeType(String v) {

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
+import gov.nist.healthcare.unified.model.EnhancerH;
 import validator.Util;
 import validator.Validation;
 import gov.nist.healthcare.unified.enums.Context;
@@ -29,15 +30,18 @@ public class ValidationProxy {
 	
 	public EnhancedReport validate(String msg,String profile,String constraints,String vs,String id,Context context) throws Exception{
 	
-			String content = Util.streamAsString(msg);
-			String pr = Util.streamAsString(profile);
-			Report r = Validation.validate(profile, constraints, vs, content,id);
-			String ctx = "";
-			ArrayList<Section> mds = new ArrayList<Section>();
-			mds.add(service);
-			if(context == Context.Free) ctx = "Context-Free"; else ctx = "Context-Based";
-			return EnhancedReport.fromValidation(r, content, pr, id,mds,ctx);
-		
+		String content = Util.streamAsString(msg);
+		String pr = Util.streamAsString(profile);
+		Report r = Validation.validate(profile, constraints, vs, content,id);
+		String ctx = "";
+		ArrayList<Section> mds = new ArrayList<Section>();
+		mds.add(service);
+		if(context == Context.Free) ctx = "Context-Free"; else ctx = "Context-Based";
+		EnhancedReport enhancedReport = new EnhancedReport();
+		EnhancerH.enhanceHeader(enhancedReport, mds, msg);
+		EnhancerH.enhanceWithReport(enhancedReport, r);
+		return enhancedReport;
+		//return EnhancedReport.fromValidation(r, content, pr, id,mds,ctx);
 
 	}
 	

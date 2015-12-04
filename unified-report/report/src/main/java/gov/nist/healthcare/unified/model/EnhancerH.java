@@ -39,13 +39,17 @@ public class EnhancerH {
 	}
 
 	public static void enhanceHeader(EnhancedReport er, String msg) {
-		er.getMetadata().put("standardType", StandardTypeType.HL_7_V_2.value());
+		er.getMetadata().put("standardType", StandardTypeType.NCPDP.value());
 		er.getMetadata()
 				.put("validationType", ValidationType.AUTOMATED.value());
 
 		er.getMetadata().put("message.content", msg);
-		er.getMetadata()
-				.put("message.encoding", EncodingConstants.ER_7.value());
+		if(!msg.startsWith("<?xml"))
+			er.getMetadata()
+				.put("message.encoding", EncodingConstants.EDI.value());
+		else
+			er.getMetadata()
+					.put("message.encoding", EncodingConstants.XML.value());
 		Collection cls = new Collection("failuresInterpretation");
 		cls.setRaw(ConfigHandler.getFailuresInterpretation());
 		er.getMetadata().put(cls);

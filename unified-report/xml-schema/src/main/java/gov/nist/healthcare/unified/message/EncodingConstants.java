@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *     &lt;enumeration value="ER7"/>
  *     &lt;enumeration value="XML"/>
+ *     &lt;enumeration value="EDI"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -34,7 +35,8 @@ public enum EncodingConstants {
 
     @XmlEnumValue("ER7")
     ER_7("ER7"),
-    XML("XML");
+    XML("XML"),
+    EDI("EDI");
     private final String value;
 
     EncodingConstants(String v) {
