@@ -363,12 +363,6 @@
 							<xsl:value-of select="@Specification" />
 						</td>
 					</tr>
-					<tr class="border_bottom">
-						<td class="row2 border_right dark-gray">HL7 Version</td>
-						<td class="row3 ">
-							<xsl:value-of select="@HL7Version" />
-						</td>
-					</tr>
 				</tbody>
 			</table>
 		</div>

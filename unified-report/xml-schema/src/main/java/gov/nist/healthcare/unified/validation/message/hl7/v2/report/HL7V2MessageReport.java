@@ -49,7 +49,6 @@ import gov.nist.healthcare.unified.validation.message.hl7.v2.context.HL7V2Messag
  *                           &lt;attribute name="Name" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                           &lt;attribute name="Type" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                           &lt;attribute name="Version" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                           &lt;attribute name="HL7Version" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                           &lt;attribute name="Date" type="{http://www.w3.org/2001/XMLSchema}string" />
  *                         &lt;/restriction>
  *                       &lt;/complexContent>
@@ -711,7 +710,6 @@ public class HL7V2MessageReport {
 	 *                 &lt;attribute name="Name" type="{http://www.w3.org/2001/XMLSchema}string" />
 	 *                 &lt;attribute name="Type" type="{http://www.w3.org/2001/XMLSchema}string" />
 	 *                 &lt;attribute name="Version" type="{http://www.w3.org/2001/XMLSchema}string" />
-	 *                 &lt;attribute name="HL7Version" type="{http://www.w3.org/2001/XMLSchema}string" />
 	 *                 &lt;attribute name="Date" type="{http://www.w3.org/2001/XMLSchema}string" />
 	 *               &lt;/restriction>
 	 *             &lt;/complexContent>
@@ -1043,7 +1041,6 @@ public class HL7V2MessageReport {
 		 *       &lt;attribute name="Name" type="{http://www.w3.org/2001/XMLSchema}string" />
 		 *       &lt;attribute name="Type" type="{http://www.w3.org/2001/XMLSchema}string" />
 		 *       &lt;attribute name="Version" type="{http://www.w3.org/2001/XMLSchema}string" />
-		 *       &lt;attribute name="HL7Version" type="{http://www.w3.org/2001/XMLSchema}string" />
 		 *       &lt;attribute name="Date" type="{http://www.w3.org/2001/XMLSchema}string" />
 		 *     &lt;/restriction>
 		 *   &lt;/complexContent>
@@ -1064,8 +1061,6 @@ public class HL7V2MessageReport {
 			protected String type;
 			@XmlAttribute(name = "Version")
 			protected String version;
-			@XmlAttribute(name = "HL7Version")
-			protected String hl7Version;
 			@XmlAttribute(name = "Date")
 			protected String date;
 			@XmlAttribute(name = "MessageType")
@@ -1075,20 +1070,12 @@ public class HL7V2MessageReport {
 			@XmlAttribute(name = "Specification")
 			protected String specification;
 
-			public String getHl7Version() {
-				return hl7Version;
-			}
-
 			public String getSpecification() {
 				return specification;
 			}
 
 			public void setSpecification(String specification) {
 				this.specification = specification;
-			}
-
-			public void setHl7Version(String hl7Version) {
-				this.hl7Version = hl7Version;
 			}
 
 			public String getIdentifier() {
@@ -1189,27 +1176,6 @@ public class HL7V2MessageReport {
 			 */
 			public void setVersion(String value) {
 				this.version = value;
-			}
-
-			/**
-			 * Gets the value of the hl7Version property.
-			 * 
-			 * @return possible object is {@link String }
-			 * 
-			 */
-			public String getHL7Version() {
-				return hl7Version;
-			}
-
-			/**
-			 * Sets the value of the hl7Version property.
-			 * 
-			 * @param value
-			 *            allowed object is {@link String }
-			 * 
-			 */
-			public void setHL7Version(String value) {
-				this.hl7Version = value;
 			}
 
 			/**

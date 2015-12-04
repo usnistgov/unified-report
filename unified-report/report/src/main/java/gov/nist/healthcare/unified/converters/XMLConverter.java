@@ -114,8 +114,6 @@ public class XMLConverter implements Converter {
 						profile.setVersion(tmp.toString());
 					if (cursor.accessPrimitive("type", tmp))
 						profile.setType(tmp.toString());
-					if (cursor.accessPrimitive("hl7version", tmp))
-						profile.setHL7Version(tmp.toString());
 					if (cursor.accessPrimitive("messageType", tmp))
 						profile.setMessageType(tmp.toString());
 					if (cursor.accessPrimitive("date", tmp))
@@ -143,7 +141,8 @@ public class XMLConverter implements Converter {
 				if (mds.accessComplex("message", cursor)) {
 					if (cursor.accessPrimitive("content", tmp))
 						msg.setEr7Message(tmp.toString());
-					msg.setEncoding(EncodingConstants.ER_7);
+					if (cursor.accessPrimitive("encoding", tmp))
+						msg.setEncoding(EncodingConstants.fromValue(tmp.toString()));
 				}
 
 				if (mds.accessPrimitive("standardType", tmp))
@@ -315,7 +314,6 @@ public class XMLConverter implements Converter {
 						.put("orgName", profile.getOrganization())
 						.put("version", profile.getVersion())
 						.put("type", profile.getType())
-						.put("hl7version", profile.getHL7Version())
 						.put("messageType",profile.getMessageType())
 						.put("date", profile.getDate())
 						.put("specification", profile.getSpecification())
