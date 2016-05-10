@@ -3,14 +3,14 @@
   <parent>
     <groupId>gov.nist.healthcare.hl7.v2.unifiedreport</groupId>
     <artifactId>unified-report</artifactId>
-    <version>0.0.8-SNAPSHOT</version>
+    <version>1.0.3</version>
   </parent>
   <artifactId>report</artifactId>
   <dependencies>
   	<dependency>
 	  	<groupId>gov.nist.healthcare.hl7.v2.unifiedreport</groupId>
 	    <artifactId>xml-schema</artifactId>
-	    <version>0.0.8-SNAPSHOT</version>
+	    <version>1.0.3</version>
   	</dependency>
   </dependencies>
 </project>

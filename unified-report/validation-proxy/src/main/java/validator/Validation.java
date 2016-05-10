@@ -29,16 +29,13 @@ public class Validation {
 //		InputStream is_pro = Validation.class.getResourceAsStream(profile);
 //		InputStream is_cons = Validation.class.getResourceAsStream(constraint);
 //		InputStream is_vs = Validation.class.getResourceAsStream(vs);
-		
 		Profile is_pro = getProfile(profile);
-		
 		ConformanceContext is_cons = getConformanceContext(constraint);
 		ValueSetLibrary is_vs = getValueSetLibrary(vs);
 		
 //		ConformanceContext c = DefaultConformanceContext.apply(is_cons).get();
 //		Map<String, Function3<Plugin, Element, Separators, EvalResult>> pluginMap = Map$.MODULE$.empty();
 //		ValueSetLibrary valueSetLibrary = ValueSetLibrary.apply(is_vs).get();
-		
 		return new SyncHL7Validator(is_pro, is_vs, is_cons).check(message, id);
 	}
 	

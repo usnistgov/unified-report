@@ -9,6 +9,7 @@ public class Reference extends AssertionMetaData {
 	private String generatedBy;
 	private String referencePath;
 	private String testDataCategorization;
+	
 	public String getChapter() {
 		return chapter;
 	}

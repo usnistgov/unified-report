@@ -5,9 +5,7 @@ import gov.nist.healthcare.unified.exceptions.NotFoundException;
 import gov.nist.healthcare.unified.expressions.Action;
 import gov.nist.healthcare.unified.model.EnhancedReport;
 import gov.nist.healthcare.unified.model.Section;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Filter {
 	private ArrayList<Restriction> restrictions = new ArrayList<Restriction>();
@@ -60,6 +58,10 @@ public class Filter {
 		}
 		result.put(Rentries);
 		return result;
+	}
+	
+	public static void removeClassification(EnhancedReport r,String classf){
+		r.getDetections().remove(classf);
 	}
 	
 	public static boolean same(Section entry1,Section entry2){

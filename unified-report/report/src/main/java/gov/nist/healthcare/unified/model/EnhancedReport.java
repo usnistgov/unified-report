@@ -24,7 +24,6 @@ public class EnhancedReport implements AccessibleObject {
 
 	public EnhancedReport() {
 		super();
-
 	}
 
 	public static void initC() {

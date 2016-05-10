@@ -137,6 +137,12 @@ public class Detections extends Section {
 			}
 		}
 	}
+	
+	public void remove(String classf){
+		int x = this.get(classf);
+		if(x != -1)
+			this.cl.remove(x);
+	}
 
 	@Override
 	public JSONObject raw() {
