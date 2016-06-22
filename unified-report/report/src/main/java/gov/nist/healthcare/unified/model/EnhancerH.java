@@ -127,7 +127,6 @@ public class EnhancerH {
 		String root_msg = "ConformanceProfile/Messages/Message[@ID = '" + id
 				+ "']/";
 
-		JSONObject o = new JSONObject();
 		DocumentBuilder builder;
 		try {
 
@@ -197,6 +196,7 @@ public class EnhancerH {
 			e.printStackTrace();
 		}
 	}
+	
 
 	public static Section format(Entry e) {
 		Section s = new Section("");
