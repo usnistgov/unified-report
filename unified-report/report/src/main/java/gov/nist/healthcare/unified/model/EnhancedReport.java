@@ -6,6 +6,7 @@ import gov.nist.healthcare.unified.converters.XMLConverter;
 import gov.nist.healthcare.unified.exceptions.ConversionException;
 import gov.nist.healthcare.unified.exceptions.NotFoundException;
 import gov.nist.healthcare.unified.interfaces.Converter;
+import gov.nist.healthcare.unified.render.NCPDPRender;
 import gov.nist.healthcare.unified.render.Render;
 import gov.nist.healthcare.unified.render.ReportRender;
 import gov.nist.validation.report.Report;
@@ -35,6 +36,7 @@ public class EnhancedReport implements AccessibleObject {
 		converters.add(new JSONConverter());
 		converters.add(new ModelConverter());
 		renders.add(new ReportRender());
+		renders.add(new NCPDPRender());
 	}
 	
     public void showSeparators(boolean x){
@@ -167,7 +169,7 @@ public class EnhancedReport implements AccessibleObject {
 		initC();
 		for (Render c : renders) {
 			if (c.getName().equals(tmp)) {
-				return c.render(this.to("xml").toString(), params);
+				return c.render(this, params);
 			}
 		}
 		throw new Exception("Unsupported Template");
