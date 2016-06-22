@@ -359,8 +359,9 @@ public class XMLConverter implements Converter {
 
 			if (msg != null) {
 				tmp = new Section("message");
-				tmp.put("content", msg.getEr7Message()).put("encoding",
+				tmp.put("content", EnhancedReport.messageF(msg.getEr7Message(),false)).put("encoding",
 						msg.getEncoding().value());
+				er.setOriginalMsg(msg.getEr7Message());
 				metadata.put(tmp);
 			}
 

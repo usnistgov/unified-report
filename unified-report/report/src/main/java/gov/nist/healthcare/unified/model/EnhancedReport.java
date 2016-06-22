@@ -18,6 +18,7 @@ import org.json.JSONObject;
 public class EnhancedReport implements AccessibleObject {
 	private Section metadata = new Section("metaData");
 	private Detections detections = new Detections();
+	private String originalMsg;
 	private static ArrayList<Converter> converters = new ArrayList<Converter>();
 	private static ArrayList<Render> renders = new ArrayList<Render>();
 	private static boolean inited = false;
@@ -35,10 +36,46 @@ public class EnhancedReport implements AccessibleObject {
 		converters.add(new ModelConverter());
 		renders.add(new ReportRender());
 	}
+	
+    public void showSeparators(boolean x){
+        Section o = new Section("");
+        String newM = messageF(originalMsg,x);
+        if(metadata.accessComplex("message", o)){
+            o.put("content", newM);
+        } else {
+            Section m = new Section("message");
+            m.put("content", newM);
+            metadata.put(m);
+        }
+    }
+    
+    public static String messageF(String message, boolean showHex){
+        
+        String out = "";
+        for(char c : message.toCharArray()){
+            if(isPrintable(c))
+                out += c;
+            else {
+                if(showHex){
+                    String hex = String.format("%04x", (int) c);
+                    out += "[x"+hex+"]";
+                }
+            }
+            
+        }
+        return out;
+    }
+    
+    public static boolean isPrintable(char c){
+        int i = (int) c;
+        return i == 10 || i < 0 || i > 31;
+    }
 
 	public static EnhancedReport fromValidation(Report r, String message,
 			String profile, String id, ArrayList<Section> mds, String context) {
 		EnhancedReport rp = new EnhancedReport();
+		rp.setOriginalMsg(message);
+		message = messageF(message,false);
 		if (mds != null)
 			EnhancerH.enhanceHeader(rp, mds, message);
 		else
@@ -64,6 +101,14 @@ public class EnhancedReport implements AccessibleObject {
 		this.metadata.put("testCase.group", testGroup);
 		this.metadata.put("testCase.case", testCase);
 		this.metadata.put("testCase.step", testStep);
+	}
+	
+	public String getOriginalMsg() {
+		return originalMsg;
+	}
+
+	public void setOriginalMsg(String originalMsg) {
+		this.originalMsg = originalMsg;
 	}
 
 	public static EnhancedReport from(String format, String content)
