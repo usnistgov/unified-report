@@ -11,6 +11,7 @@ import javax.xml.transform.stream.StreamSource;
 
 import gov.nist.healthcare.unified.exceptions.RenderException;
 import gov.nist.healthcare.unified.model.EnhancedReport;
+import gov.nist.healthcare.unified.model.StringRef;
 
 import org.json.JSONObject;
 
@@ -18,15 +19,18 @@ public class NCPDPRender implements Render {
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return "ncpdp-report";
+		return "report";
 	}
 
 	@Override
 	public String render(EnhancedReport r, JSONObject params) throws RenderException {
 
 		try {
-			r.showSeparators(false);
+			StringRef ref = new StringRef();
+			
+			if(EnhancedReport.nonPrintables(r.getMessage(), false, ref))
+				r.setMessage(ref.value);
+			
 			String xml = r.to("xml").toString();
 			InputStream is = new ByteArrayInputStream(xml.getBytes());
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -35,8 +39,7 @@ public class NCPDPRender implements Render {
 			
 			transformer = tFactory.newTransformer(new StreamSource(this
 					.getClass().getResourceAsStream("/stylesheets/"+this.getName()+".xsl")));
-			
-			transformer.setParameter("msgWithSeparators", EnhancedReport.messageF(r.getOriginalMsg(), true));
+	
 			
 			if(params != null){
 				
@@ -44,9 +47,6 @@ public class NCPDPRender implements Render {
 					transformer.setParameter("excluded", params.getString("excluded"));
 				}
 				
-				if(params.has("msgWithSeparators")){
-					transformer.setParameter("msgWithSeparators", params.getString("msgWithSeparators"));
-				}
 			}
 			transformer.transform(new StreamSource(is), new StreamResult(os));
 			String result = os.toString();

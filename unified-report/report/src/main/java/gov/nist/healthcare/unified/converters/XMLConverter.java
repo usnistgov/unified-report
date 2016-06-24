@@ -143,6 +143,8 @@ public class XMLConverter implements Converter {
 				if (mds.accessComplex("message", cursor)) {
 					if (cursor.accessPrimitive("content", tmp))
 						msg.setEr7Message(tmp.toString());
+					if (cursor.accessPrimitive("hex", tmp))
+						msg.setEr7MessageHexFormatted(tmp.toString());
 					msg.setEncoding(EncodingConstants.ER_7);
 				}
 
@@ -168,6 +170,7 @@ public class XMLConverter implements Converter {
 			try {
 				return this.objToString(mvr);
 			} catch (Exception e) {
+				e.printStackTrace();
 				return "";
 			}
 
@@ -359,9 +362,9 @@ public class XMLConverter implements Converter {
 
 			if (msg != null) {
 				tmp = new Section("message");
-				tmp.put("content", EnhancedReport.messageF(msg.getEr7Message(),false)).put("encoding",
-						msg.getEncoding().value());
-				er.setOriginalMsg(msg.getEr7Message());
+				tmp.put("content", msg.getEr7Message())
+				.put("encoding",msg.getEncoding().value())
+				.put("hex", msg.getEr7MessageHexFormatted());
 				metadata.put(tmp);
 			}
 

@@ -888,13 +888,15 @@ public class HL7V2MessageReport {
 		 * 
 		 */
 		@XmlAccessorType(XmlAccessType.FIELD)
-		@XmlType(name = "", propOrder = { "xmlMessage", "er7Message" })
+		@XmlType(name = "", propOrder = { "xmlMessage", "er7Message", "er7MessageHexFormatted" })
 		public static class Message {
 
 			@XmlElement(name = "XmlMessage")
 			protected Object xmlMessage;
 			@XmlElement(name = "Er7Message")
 			protected String er7Message;
+			@XmlElement(name = "Er7MessageHexFormatted")
+			protected String er7MessageHexFormatted;
 			@XmlAttribute(name = "Id")
 			protected String id;
 			@XmlAttribute(name = "Filename")
@@ -1024,6 +1026,16 @@ public class HL7V2MessageReport {
 			public void setTransformed(boolean value) {
 				this.transformed = value;
 			}
+
+			public String getEr7MessageHexFormatted() {
+				return er7MessageHexFormatted;
+			}
+
+			public void setEr7MessageHexFormatted(String er7MessageHexFormatted) {
+				this.er7MessageHexFormatted = er7MessageHexFormatted;
+			}
+			
+			
 
 		}
 
