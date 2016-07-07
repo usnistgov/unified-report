@@ -13,7 +13,6 @@
 		match="/report:HL7V2MessageValidationReport/report:SpecificReport/report:AssertionList/report:Assertion"
 		use="concat(@Type,'+',@Result)" />
 	<xsl:param name="excluded" />
-	<xsl:param name="msgWithSeparators" />
 	<xsl:variable name="smallcase" select="'abcdefghijklmnopqrstuvwxyz'" />
 	<xsl:variable name="uppercase" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'" />
 	<xsl:template match="/report:HL7V2MessageValidationReport">
@@ -55,15 +54,15 @@
 					}
 					};
 					
-					function ShowSep() {
-					var tabC = document.getElementById("msgC");
-					var tabS = document.getElementById("msgS");
+					function ShowSep(id) {
+					var tabC = document.getElementById("msgC"+id);
+					var tabS = document.getElementById("msgS"+id);
 					tabC.style.display = 'none';
 					tabS.style.display = '';
 					};
-					function HideSep() {
-					var tabC = document.getElementById("msgC");
-					var tabS = document.getElementById("msgS");
+					function HideSep(id) {
+					var tabC = document.getElementById("msgC"+id);
+					var tabS = document.getElementById("msgS"+id);
 					tabC.style.display = '';
 					tabS.style.display = 'none';
 					};
@@ -390,11 +389,19 @@
 	<xsl:template match="report:MetaData/report:Message">
 		<div class="report-section">
 			<table class="forumline" width="100%" cellspacing="1"
-				cellpadding="2" id="msgC">
+				cellpadding="2">
+				<xsl:attribute name="id">msgC<xsl:value-of select="generate-id()"/></xsl:attribute>
 				<tbody>
 					<tr>
 						<td class="row1 border_right" valign="top" rowspan="2">Message
-						<button onclick="ShowSep()">Show Separators</button>
+						<xsl:choose>
+  							<xsl:when test="report:Er7MessageHexFormatted">
+  								<button>
+									<xsl:attribute name="onclick">ShowSep('<xsl:value-of select="generate-id()"/>')</xsl:attribute>
+										Show Non Printable Characters
+								</button>
+  							</xsl:when>
+						</xsl:choose>
 						</td>
 						<td class="row2 border_right dark-gray">Encoding</td>
 						<td class="row3 ">
@@ -405,7 +412,7 @@
 						<td class="row2 border_right dark-gray">Content</td>
 						<td class="row3 ">
 							<div style="text-align: center">
-								<textarea cols="80" readonly="true" rows="10" wrap="off">
+								<textarea style="width : 100%;" readonly="true" rows="10" wrap="off">
 									<xsl:value-of select="report:Er7Message" />
 								</textarea>
 							</div>
@@ -413,30 +420,38 @@
 					</tr>
 				</tbody>
 			</table>
-			<table class="forumline" width="100%" cellspacing="1"
-				cellpadding="2" id="msgS" style="display: none;">
-				<tbody>
-					<tr>
-						<td class="row1 border_right" valign="top" rowspan="2">Message 
-						<button onclick="HideSep()">Hide Separators</button>
-						</td>
-						<td class="row2 border_right dark-gray">Encoding</td>
-						<td class="row3 ">
-							<xsl:value-of select="@Encoding" />
-						</td>
-					</tr>
-					<tr class="border_bottom">
-						<td class="row2 border_right dark-gray">Content</td>
-						<td class="row3 ">
-							<div style="text-align: center">
-								<textarea cols="80" readonly="true" rows="10" wrap="off">
-									<xsl:value-of select="$msgWithSeparators" />
-								</textarea>
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+			<xsl:choose>
+  				<xsl:when test="report:Er7MessageHexFormatted">
+					<table class="forumline" width="100%" cellspacing="1"
+						cellpadding="2" style="display: none;">
+						<xsl:attribute name="id">msgS<xsl:value-of select="generate-id()"/></xsl:attribute>
+						<tbody>
+							<tr>
+								<td class="row1 border_right" valign="top" rowspan="2">Message 
+								<button>
+									<xsl:attribute name="onclick">HideSep('<xsl:value-of select="generate-id()"/>')</xsl:attribute>
+									Hide Non Printable Characters
+								</button>
+								</td>
+								<td class="row2 border_right dark-gray">Encoding</td>
+								<td class="row3 ">
+									<xsl:value-of select="@Encoding" />
+								</td>
+							</tr>
+							<tr class="border_bottom">
+								<td class="row2 border_right dark-gray">Content</td>
+								<td class="row3 ">
+									<div style="text-align: center">
+										<textarea style="width : 100%;" readonly="true" rows="10" wrap="off">
+											<xsl:value-of select="report:Er7MessageHexFormatted" />
+										</textarea>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</xsl:when>
+			</xsl:choose>
 		</div>
 	</xsl:template>
 	<xsl:template name="Summary">

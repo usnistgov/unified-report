@@ -114,6 +114,8 @@ public class XMLConverter implements Converter {
 						profile.setVersion(tmp.toString());
 					if (cursor.accessPrimitive("type", tmp))
 						profile.setType(tmp.toString());
+					if (cursor.accessPrimitive("hl7version", tmp))
+						profile.setHL7Version(tmp.toString());
 					if (cursor.accessPrimitive("messageType", tmp))
 						profile.setMessageType(tmp.toString());
 					if (cursor.accessPrimitive("date", tmp))
@@ -141,8 +143,9 @@ public class XMLConverter implements Converter {
 				if (mds.accessComplex("message", cursor)) {
 					if (cursor.accessPrimitive("content", tmp))
 						msg.setEr7Message(tmp.toString());
-					if (cursor.accessPrimitive("encoding", tmp))
-						msg.setEncoding(EncodingConstants.fromValue(tmp.toString()));
+					if (cursor.accessPrimitive("hex", tmp))
+						msg.setEr7MessageHexFormatted(tmp.toString());
+					msg.setEncoding(EncodingConstants.ER_7);
 				}
 
 				if (mds.accessPrimitive("standardType", tmp))
@@ -167,6 +170,7 @@ public class XMLConverter implements Converter {
 			try {
 				return this.objToString(mvr);
 			} catch (Exception e) {
+				e.printStackTrace();
 				return "";
 			}
 
@@ -314,6 +318,7 @@ public class XMLConverter implements Converter {
 						.put("orgName", profile.getOrganization())
 						.put("version", profile.getVersion())
 						.put("type", profile.getType())
+						.put("hl7version", profile.getHL7Version())
 						.put("messageType",profile.getMessageType())
 						.put("date", profile.getDate())
 						.put("specification", profile.getSpecification())
@@ -357,9 +362,9 @@ public class XMLConverter implements Converter {
 
 			if (msg != null) {
 				tmp = new Section("message");
-				tmp.put("content", EnhancedReport.messageF(msg.getEr7Message(),false)).put("encoding",
-						msg.getEncoding().value());
-				er.setOriginalMsg(msg.getEr7Message());
+				tmp.put("content", msg.getEr7Message())
+				.put("encoding",msg.getEncoding().value())
+				.put("hex", msg.getEr7MessageHexFormatted());
 				metadata.put(tmp);
 			}
 

@@ -23,18 +23,6 @@ public class JSONConverter implements Converter {
 		if(j.has("metaData")){
 			Section sect = new Section("metaData");
 			sect.setRaw(j.getJSONObject("metaData"));
-			
-			
-			JSONObject md = j.getJSONObject("metaData");
-			if(md.has("message")){
-				JSONObject msg = md.getJSONObject("message");
-				if(msg.has("content")){
-					er.setOriginalMsg(msg.getString("content"));
-					msg.put("content", EnhancedReport.messageF(msg.getString("content"), false));
-				} else {
-					er.setOriginalMsg("");
-				}
-			}		
 			er.setMetadata(sect);	
 		}
 		

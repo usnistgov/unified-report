@@ -44,9 +44,13 @@ public class EnhancerH {
 				.put("validationType", ValidationType.AUTOMATED.value());
 
 		er.getMetadata().put("message.content", msg);
+		StringRef ref = new StringRef();
+		if(EnhancedReport.nonPrintables(msg, true, ref)){
+			er.getMetadata().put("message.hex", ref.value);
+		}
 		if(!msg.startsWith("<?xml"))
 			er.getMetadata()
-				.put("message.encoding", EncodingConstants.EDI.value());
+					.put("message.encoding", EncodingConstants.EDI.value());
 		else
 			er.getMetadata()
 					.put("message.encoding", EncodingConstants.XML.value());

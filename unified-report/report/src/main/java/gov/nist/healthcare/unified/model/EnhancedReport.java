@@ -19,7 +19,6 @@ import org.json.JSONObject;
 public class EnhancedReport implements AccessibleObject {
 	private Section metadata = new Section("metaData");
 	private Detections detections = new Detections();
-	private String originalMsg;
 	private static ArrayList<Converter> converters = new ArrayList<Converter>();
 	private static ArrayList<Render> renders = new ArrayList<Render>();
 	private static boolean inited = false;
@@ -38,26 +37,17 @@ public class EnhancedReport implements AccessibleObject {
 		renders.add(new ReportRender());
 		renders.add(new NCPDPRender());
 	}
-	
-    public void showSeparators(boolean x){
-        Section o = new Section("");
-        String newM = messageF(originalMsg,x);
-        if(metadata.accessComplex("message", o)){
-            o.put("content", newM);
-        } else {
-            Section m = new Section("message");
-            m.put("content", newM);
-            metadata.put(m);
-        }
-    }
     
-    public static String messageF(String message, boolean showHex){
+    public static boolean nonPrintables(String message, boolean showHex, StringRef str){
         
         String out = "";
+        boolean has = false;
+        
         for(char c : message.toCharArray()){
             if(isPrintable(c))
                 out += c;
             else {
+            	has = true;
                 if(showHex){
                     String hex = String.format("%04x", (int) c);
                     out += "[x"+hex+"]";
@@ -65,19 +55,35 @@ public class EnhancedReport implements AccessibleObject {
             }
             
         }
-        return out;
+        str.value = out;
+        return has;
     }
+    
     
     public static boolean isPrintable(char c){
         int i = (int) c;
         return i == 10 || i < 0 || i > 31;
     }
 
+    public String getMessage(){
+    	Section s = new Section("md");
+    	if(this.metadata.accessComplex("message", s)){
+    		StringRef ref = new StringRef();
+    		if(s.accessPrimitive("content", ref)){
+    			return ref.value;
+    		}
+    	}
+    	return "";
+    }
+    
+    public void setMessage(String msg){
+    	this.metadata.put("message.content", msg);
+    }
+    
 	public static EnhancedReport fromValidation(Report r, String message,
 			String profile, String id, ArrayList<Section> mds, String context) {
 		EnhancedReport rp = new EnhancedReport();
-		rp.setOriginalMsg(message);
-		message = messageF(message,false);
+
 		if (mds != null)
 			EnhancerH.enhanceHeader(rp, mds, message);
 		else
@@ -103,14 +109,6 @@ public class EnhancedReport implements AccessibleObject {
 		this.metadata.put("testCase.group", testGroup);
 		this.metadata.put("testCase.case", testCase);
 		this.metadata.put("testCase.step", testStep);
-	}
-	
-	public String getOriginalMsg() {
-		return originalMsg;
-	}
-
-	public void setOriginalMsg(String originalMsg) {
-		this.originalMsg = originalMsg;
 	}
 
 	public static EnhancedReport from(String format, String content)
