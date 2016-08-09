@@ -114,8 +114,6 @@ public class XMLConverter implements Converter {
 						profile.setVersion(tmp.toString());
 					if (cursor.accessPrimitive("type", tmp))
 						profile.setType(tmp.toString());
-					if (cursor.accessPrimitive("hl7version", tmp))
-						profile.setHL7Version(tmp.toString());
 					if (cursor.accessPrimitive("messageType", tmp))
 						profile.setMessageType(tmp.toString());
 					if (cursor.accessPrimitive("date", tmp))
@@ -318,7 +316,6 @@ public class XMLConverter implements Converter {
 						.put("orgName", profile.getOrganization())
 						.put("version", profile.getVersion())
 						.put("type", profile.getType())
-						.put("hl7version", profile.getHL7Version())
 						.put("messageType",profile.getMessageType())
 						.put("date", profile.getDate())
 						.put("specification", profile.getSpecification())
