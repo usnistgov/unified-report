@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.ArrayList;
 
 import gov.nist.healthcare.unified.model.EnhancerH;
-import validator.Util;
 import validator.Validation;
 import gov.nist.healthcare.unified.enums.Context;
 import gov.nist.healthcare.unified.model.EnhancedReport;
@@ -25,10 +24,10 @@ public class XMLValidationProxy {
         service.put("validationVersion", buildinfo.Info.version());
     }
 
-    public EnhancedReport validate(String msg, Schema schema, List<String> schematrons, String skeleton, String phase, Context context) {
+    public EnhancedReport validate(String msg, List<Schema> schemas, List<String> schematrons, String phase, Context context) {
         try {
             //String content = Util.streamAsString(msg);
-            Report validationReport = Validation.validate(msg, schema, schematrons, skeleton, phase);
+            Report validationReport = Validation.validate(msg, schemas, schematrons, phase);
             String ctx = "";
             if (context == Context.Free) ctx = "Context-Free";
             else ctx = "Context-Based";

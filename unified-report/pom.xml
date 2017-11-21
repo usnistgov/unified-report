@@ -27,13 +27,13 @@
 		<dependency>
 			<groupId>gov.nist</groupId>
 			<artifactId>edi-validation</artifactId>
-			<version>1.1.15-N</version>
+			<version>1.1.18-N</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>gov.nist</groupId>
-			<artifactId>xmlvalidation</artifactId>
-			<version>1.1.15-N</version>
+			<groupId>gov.nist.hit.validation</groupId>
+			<artifactId>hit-xml-validation</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 
 		<dependency>

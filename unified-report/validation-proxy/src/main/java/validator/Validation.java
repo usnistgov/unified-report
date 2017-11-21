@@ -1,29 +1,19 @@
 package validator;
 
 
-import gov.nist.validation.report.Report;
-import hl7.v2.instance.Element;
-import hl7.v2.instance.Separators;
-import hl7.v2.profile.Profile;
-import ncpdp.script.profile.XMLDeserializer;
 import edi.ncpdp.script.validation.SyncNCPDPValidator;
+import gov.nist.validation.report.Report;
+import hl7.v2.profile.Profile;
 import hl7.v2.validation.content.ConformanceContext;
 import hl7.v2.validation.content.DefaultConformanceContext;
 import hl7.v2.validation.vs.ValueSetLibrary;
 import hl7.v2.validation.vs.ValueSetLibraryImpl;
+import ncpdp.script.profile.XMLDeserializer;
 
-import java.io.ByteArrayInputStream;
+import javax.xml.validation.Schema;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
-
-import scala.Function3;
-import scala.collection.immutable.Map;
-import scala.collection.immutable.Map$;
-import expression.EvalResult;
-import expression.Plugin;
-
-import javax.xml.validation.Schema;
 
 public class Validation {
 	
@@ -48,8 +38,8 @@ public class Validation {
 		return new SyncNCPDPValidator(profile, vs, constraint).check(message, id);
 	}
 	
-	public static Report validate(String xmlFile, Schema schema, List<String> schematrons, String skeleton, String phase){
-		return gov.nist.erx.xml.Validator.validate(xmlFile,schema,schematrons,skeleton,phase);
+	public static Report validate(String xmlFile, List<Schema> schemas, List<String> schematrons, String phase){
+		return gov.nist.hit.xml.Validator.validate(xmlFile,schemas,schematrons,phase);
 	}
 	
 //	public static Report validate(){
