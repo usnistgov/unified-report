@@ -1,0 +1,7 @@
+unified-report/xml-schema/target
+unified-report/validation-proxy/target
+unified-report/validation-proxy/bin
+unified-report/report/target
+unified-report/report/bin
+unified-report/report-filter/bin
+unified-report/report-filter/target
