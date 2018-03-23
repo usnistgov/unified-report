@@ -48,8 +48,12 @@ public class EnhancerH {
 		if(EnhancedReport.nonPrintables(msg, true, ref)){
 			er.getMetadata().put("message.hex", ref.value);
 		}
-		er.getMetadata()
+		if(!msg.startsWith("<?xml")){
+			er.getMetadata()
 				.put("message.encoding", EncodingConstants.ER_7.value());
+		} else
+			er.getMetadata()
+					.put("message.encoding", EncodingConstants.XML.value());
 		Collection cls = new Collection("failuresInterpretation");
 		cls.setRaw(ConfigHandler.getFailuresInterpretation());
 		er.getMetadata().put(cls);

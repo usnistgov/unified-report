@@ -13,6 +13,7 @@ import hl7.v2.validation.vs.ValueSetLibrary;
 import hl7.v2.validation.vs.ValueSetLibraryImpl;
 
 import java.io.ByteArrayInputStream;
+import javax.xml.validation.Schema;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
@@ -41,6 +42,10 @@ public class Validation {
 	
 	public static Report validate(Profile profile,ConformanceContext constraint,ValueSetLibrary vs,String message,String id) throws Exception{	
 		return new SyncHL7Validator(profile, vs, constraint).check(message, id);
+	}
+	
+	public static Report validate(String xmlFile, List<Schema> schemas, List<String> schematrons, String phase){
+		return gov.nist.hit.xml.Validator.validate(xmlFile,schemas,schematrons,phase);
 	}
 	
 //	public static Report validate(){

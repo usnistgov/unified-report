@@ -40,6 +40,7 @@ public enum StandardTypeType {
     HL_7_V_3("HL7 V3"),
     CDA("CDA"),
     DICOM("DICOM");
+    NCPDP("NCPDP");
     private final String value;
 
     StandardTypeType(String v) {

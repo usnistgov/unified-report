@@ -5,3 +5,9 @@ unified-report/report/target
 unified-report/report/bin
 unified-report/report-filter/bin
 unified-report/report-filter/target
+target/
+.idea
+*.iml
+.settings
+.classpath
+.project
