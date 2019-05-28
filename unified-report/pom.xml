@@ -1,9 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>gov.nist.healthcare.hl7.v2.unifiedreport</groupId>
 	<artifactId>unified-report</artifactId>
-	<version>1.0.7</version>
+	<version>1.0.8-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<build>
 		<plugins>
@@ -27,7 +26,7 @@
 		<dependency>
 			<groupId>gov.nist</groupId>
 			<artifactId>hl7-v2-validation</artifactId>
-			<version>1.3.1</version>
+			<version>1.4.2</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -53,4 +52,11 @@
 			<url>https://hit-dev.nist.gov:9001/repository/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
+	
+	<scm>
+		<connection>scm:git:https://github.com/usnistgov/unified-report.git</connection>
+		<url>scm:git:https://github.com/usnistgov/unified-report.git</url>
+		<developerConnection>scm:git:https://github.com/usnistgov/unified-report.git</developerConnection>
+    <tag>unified-report-1.0.8-SNAPSHOT</tag>
+  </scm>
 </project>
