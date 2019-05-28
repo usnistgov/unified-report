@@ -15,6 +15,7 @@ import hl7.v2.validation.vs.ValueSetLibraryImpl;
 import java.io.ByteArrayInputStream;
 import javax.xml.validation.Schema;
 import java.io.InputStream;
+import java.io.Reader;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,6 +39,10 @@ public class Validation {
 //		Map<String, Function3<Plugin, Element, Separators, EvalResult>> pluginMap = Map$.MODULE$.empty();
 //		ValueSetLibrary valueSetLibrary = ValueSetLibrary.apply(is_vs).get();
 		return new SyncHL7Validator(is_pro, is_vs, is_cons).check(message, id);
+	}
+	
+	public static Report validate(Profile profile,ConformanceContext constraint,ValueSetLibrary vs,String message,String id,Reader configuration) throws Exception{			
+		return new SyncHL7Validator(profile, vs, constraint).checkUsingConfiguration(message, id,configuration);
 	}
 	
 	public static Report validate(Profile profile,ConformanceContext constraint,ValueSetLibrary vs,String message,String id) throws Exception{	

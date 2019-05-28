@@ -1,14 +1,13 @@
 package gov.nist.healthcare.unified.proxy;
 
 
-import java.util.List;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
 
-import validator.Util;
-import validator.Validation;
 import gov.nist.healthcare.unified.enums.Context;
 import gov.nist.healthcare.unified.model.EnhancedReport;
 import gov.nist.healthcare.unified.model.Section;
@@ -19,6 +18,8 @@ import hl7.v2.validation.content.ConformanceContext;
 import hl7.v2.validation.content.DefaultConformanceContext;
 import hl7.v2.validation.vs.ValueSetLibrary;
 import hl7.v2.validation.vs.ValueSetLibraryImpl;
+import validator.Util;
+import validator.Validation;
 
 public class ValidationProxy {
 
@@ -99,6 +100,21 @@ public class ValidationProxy {
 			return EnhancedReport.fromValidation(r, content, pr, id, mds,ctx);
 
 	}
+	
+	public EnhancedReport validate(String content,String profile,ConformanceContext constraints,ValueSetLibrary vs,String id,Context context,Reader configuration) throws Exception{
+
+		InputStream stream = new ByteArrayInputStream(profile.getBytes(StandardCharsets.UTF_8));
+		Profile profileX = XMLDeserializer.deserialize(stream).get();
+
+		Report r = Validation.validate(profileX, constraints, vs, content,id,configuration);
+		String pr = profile;
+		String ctx = "";
+		if(context == Context.Free) ctx = "Context-Free"; else ctx = "Context-Based";
+		ArrayList<Section> mds = new ArrayList<Section>();
+		mds.add(service);
+		return EnhancedReport.fromValidation(r, content, pr, id, mds,ctx);
+
+}
 	
 
 
