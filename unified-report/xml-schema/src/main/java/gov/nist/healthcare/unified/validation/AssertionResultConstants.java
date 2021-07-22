@@ -42,7 +42,8 @@ public enum AssertionResultConstants {
     IGNORE,
     INFORMATIONAL,
     INFO,
-    NOTE;
+    NOTE,
+    SPECERROR;
 
     public String value() {
         return name();

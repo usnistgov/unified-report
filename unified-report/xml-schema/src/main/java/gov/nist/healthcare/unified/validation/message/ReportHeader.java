@@ -135,6 +135,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "noteCount",
     "infoCount",
     "alertCount",
+    "specErrorCount",
     "reportIntegrityIndicator",
     "reportIntegrityObject",
     "testObject",
@@ -198,6 +199,8 @@ public class ReportHeader {
     protected Integer alertCount;
     @XmlElement(name = "InfoCount")
     protected Integer infoCount;
+    @XmlElement(name = "SpecErrorCount")
+    protected Integer specErrorCount;    
     @XmlElement(name = "ReportIntegrityIndicator")
     protected Boolean reportIntegrityIndicator;
     @XmlElement(name = "ReportIntegrityObject")
@@ -226,6 +229,14 @@ public class ReportHeader {
     public ValidationStatusType getValidationStatus() {
         return validationStatus;
     }
+    
+    public void setSpecErrorCount(Integer specErrorCount) {
+		this.specErrorCount = specErrorCount;
+		
+	}
+    public Integer getSpecErrorCount() {
+		return specErrorCount;
+	}
 
     public Integer getInfoCount() {
 		return infoCount;

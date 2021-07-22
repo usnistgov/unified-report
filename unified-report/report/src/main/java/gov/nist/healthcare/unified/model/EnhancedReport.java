@@ -150,6 +150,7 @@ public class EnhancedReport implements AccessibleObject {
 		s.put("affirmative",0);
 		s.put("alert", 0);
 		s.put("warning", 0);
+		s.put("spec-error",0);
 		this.getMetadata().put(s);
 	}
 

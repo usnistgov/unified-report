@@ -20,6 +20,8 @@ public class Metadata {
 	private int errorsCount;
 	private int warningCount;
 	private int infoCount;
+	private int specErrorCount;
+	
 	private String messageContent;
 	
 	public String getProfileIdentifier() {
@@ -160,6 +162,14 @@ public class Metadata {
 	public void setInfoCount(int infoCount) {
 		this.infoCount = infoCount;
 	}
+	
+	public int getSpecErrorCount() {
+		return specErrorCount;
+	}
+
+	public void setSpecErrorCount(int specErrorCount) {
+		this.specErrorCount = specErrorCount;
+	}
 
 	public String getMessageContent() {
 		return messageContent;
@@ -189,7 +199,7 @@ public class Metadata {
 				+ ", profileDate=" + profileDate + ", affirmativesCount="
 				+ affirmativesCount + ", alertsCount=" + alertsCount
 				+ ", errorsCount=" + errorsCount + ", warningCount="
-				+ warningCount + ", infoCount=" + infoCount
+				+ warningCount + ", infoCount=" + infoCount + ", specErrorCount=" + specErrorCount
 				+ ", messageContent=" + messageContent + ", messageEncoding="
 				+ messageEncoding + "]";
 	}

@@ -64,6 +64,8 @@ public class ModelConverter implements Converter {
 				md.setWarningCount(Int(ref.value));
 			if (s.accessPrimitive("metaData.counts.informational", ref))
 				md.setInfoCount(Int(ref.value));
+			if (s.accessPrimitive("metaData.counts.specerror", ref))
+				md.setSpecErrorCount(Int(ref.value));			
 			if (s.accessPrimitive("metaData.message.content", ref))
 				md.setMessageContent(ref.value);
 			if (s.accessPrimitive("metaData.message.encoding", ref))

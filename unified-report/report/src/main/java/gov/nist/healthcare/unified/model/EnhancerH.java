@@ -79,6 +79,7 @@ public class EnhancerH {
 		int alert = 0;
 		int informational = 0;
 		int affirmative = 0;
+		int specerror = 0;
 		ArrayList<Section> entries = new ArrayList<Section>();
 		for (String k : r.getEntries().keySet()) {
 			for (Entry e : r.getEntries().get(k)) {
@@ -96,6 +97,9 @@ public class EnhancerH {
 				} else if (e.getClassification().toUpperCase()
 						.equals("WARNING")) {
 					warning++;
+				} else if (e.getClassification().toUpperCase()
+						.equals("SPEC_ERROR")) {
+					specerror++;
 				}
 			}
 		}
@@ -105,7 +109,8 @@ public class EnhancerH {
 		er.getMetadata().put("counts.alert", alert);
 		er.getMetadata().put("counts.informational", informational);
 		er.getMetadata().put("counts.affirmative", affirmative);
-
+		er.getMetadata().put("counts.specerror", specerror);
+		
 		if (error == 0)
 			er.getMetadata().put("validationStatus", "true");
 		else

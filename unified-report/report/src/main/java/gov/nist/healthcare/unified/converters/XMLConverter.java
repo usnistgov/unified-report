@@ -138,6 +138,8 @@ public class XMLConverter implements Converter {
 						rh.setWarningCount(Int(tmp.toString()));
 					if (cursor.accessPrimitive("informational", tmp))
 						rh.setInfoCount(Int(tmp.toString()));
+					if (cursor.accessPrimitive("spec-error", tmp))
+						rh.setSpecErrorCount(Int(tmp.toString()));
 				}
 
 				if (mds.accessComplex("message", cursor)) {
@@ -344,7 +346,8 @@ public class XMLConverter implements Converter {
 						.put("alert", Int(rh.getAlertCount()))
 						.put("error", Int(rh.getErrorCount()))
 						.put("warning", Int(rh.getWarningCount()))
-						.put("informational", Int(rh.getInfoCount()));
+						.put("informational", Int(rh.getInfoCount()))
+						.put("spec-error", Int(rh.getSpecErrorCount()));
 				metadata.put(tmp);
 				if(rh.getTestCaseReference() != null){
 					tmp = new Section("testCase");

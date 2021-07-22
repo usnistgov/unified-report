@@ -153,6 +153,13 @@
 			<xsl:with-param name="color" select="'green'" />
 			<xsl:with-param name="msg" select="'Affirmatives'" />
 		</xsl:call-template>
+		<xsl:call-template name="Assertions">
+			<xsl:with-param name="classification" select="'spec-error'" />
+			<xsl:with-param name="count"
+				select="../report:HeaderReport/message:SpecErrorCount" />
+			<xsl:with-param name="color" select="'green'" />
+			<xsl:with-param name="msg" select="'Spec Errors'" />
+		</xsl:call-template>
 		<!-- <xsl:call-template name="Assertions"> -->
 		<!-- <xsl:with-param name="classification" select="'informational'"/> -->
 		<!-- <xsl:with-param name="count" select="../report:HeaderReport/message:InfoCount"/> -->
@@ -455,6 +462,19 @@
 							<xsl:value-of select="../report:HeaderReport/message:AffirmCount" />
 							Affirmatives
 							<xsl:if test="$excluded = 'affirmative'">
+								(details not included)
+							</xsl:if>
+						</td>
+					</tr>
+					<tr class="border_bottom">
+						<td class="row6" style="color: green; font-weight: bold">
+							<xsl:if test="$excluded != 'spec-error'">
+								<input type="checkbox" onclick="toggle_visibility('spec-error',this)"
+									style="margin-left : 10px;" />
+							</xsl:if>
+							<xsl:value-of select="../report:HeaderReport/message:SpecErrorCount" />
+							Spec Error
+							<xsl:if test="$excluded = 'spec-error'">
 								(details not included)
 							</xsl:if>
 						</td>
