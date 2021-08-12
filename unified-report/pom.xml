@@ -32,7 +32,7 @@
 		<dependency>
 			<groupId>gov.nist.hit.validation</groupId>
 			<artifactId>hit-xml-validation</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
+			<version>1.0.1</version>
 		</dependency>
 
 		<dependency>
@@ -57,6 +57,5 @@
 		<connection>scm:git:https://github.com/usnistgov/unified-report.git</connection>
 		<url>scm:git:https://github.com/usnistgov/unified-report.git</url>
 		<developerConnection>scm:git:https://github.com/usnistgov/unified-report.git</developerConnection>
-    <tag>HEAD</tag>
   </scm>
 </project>
