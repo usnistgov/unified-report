@@ -9,8 +9,6 @@
 package gov.nist.healthcare.unified.validation.message;
 
 
-import gov.nist.healthcare.unified.validation.message.hl7.v2.report.TestCaseReference;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +20,8 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 import javax.xml.datatype.XMLGregorianCalendar;
+
+import gov.nist.healthcare.unified.validation.message.hl7.v2.report.TestCaseReference;
 
 
 /**
