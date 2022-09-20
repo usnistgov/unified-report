@@ -12,6 +12,7 @@ import gov.nist.validation.report.Report;
 import hl7.v2.profile.Profile;
 import hl7.v2.profile.XMLDeserializer;
 import hl7.v2.validation.SyncHL7Validator;
+import hl7.v2.validation.ValidationContext;
 import hl7.v2.validation.content.ConformanceContext;
 import hl7.v2.validation.content.DefaultConformanceContext;
 import hl7.v2.validation.vs.ValueSetLibrary;
@@ -40,6 +41,16 @@ public class Validation {
 	public static Report validate(Profile profile,ConformanceContext constraint,ValueSetLibrary vs,String message,String id) throws Exception{	
 		return new SyncHL7Validator(profile, vs, constraint).check(message, id);
 	}
+	
+	
+	public static Report validateNew(ValidationContext context,String message,String id) throws Exception{	
+		return new SyncHL7Validator(context).check(message, id);
+	}
+	
+	public static Report validateNewWithConfig(ValidationContext context,String message,String id,Reader configuration) throws Exception{	
+		return new SyncHL7Validator(context).checkUsingConfiguration(message, id, configuration);
+	}
+	
 	
 	public static Report validate(String xmlFile, List<Schema> schemas, List<String> schematrons, String phase){
 		return gov.nist.hit.xml.Validator.validate(xmlFile,schemas,schematrons,phase);

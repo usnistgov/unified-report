@@ -14,12 +14,15 @@ import gov.nist.healthcare.unified.model.Section;
 import gov.nist.validation.report.Report;
 import hl7.v2.profile.Profile;
 import hl7.v2.profile.XMLDeserializer;
+import hl7.v2.validation.ValidationContext;
+import hl7.v2.validation.ValidationContextBuilder;
 import hl7.v2.validation.content.ConformanceContext;
 import hl7.v2.validation.content.DefaultConformanceContext;
 import hl7.v2.validation.vs.ValueSetLibrary;
 import hl7.v2.validation.vs.ValueSetLibraryImpl;
 import validator.Util;
 import validator.Validation;
+
 
 public class ValidationProxy {
 
@@ -113,8 +116,52 @@ public class ValidationProxy {
 		ArrayList<Section> mds = new ArrayList<Section>();
 		mds.add(service);
 		return EnhancedReport.fromValidation(r, content, pr, id, mds,ctx);
+	}
+	
+	public EnhancedReport validateNew(String content,InputStream profile,InputStream valueSetLibrary,scala.collection.immutable.List<InputStream> conformanceContexts,InputStream vsBinding , InputStream coConstraintsContext, InputStream slicingContext,  String id,Context context,Reader configuration) throws Exception{
 
-}
+//		InputStream stream = new ByteArrayInputStream(profile.getBytes(StandardCharsets.UTF_8));
+		//check if not error here
+		Profile profileX = XMLDeserializer.deserialize(profile).get();
+
+		ValidationContextBuilder builder = new ValidationContextBuilder(profile);
+
+		ValidationContext validationContext;
+		if (valueSetLibrary != null) {
+			builder.useValueSetLibrary(valueSetLibrary);
+		}
+		if (conformanceContexts != null) {
+			builder.useConformanceContext(conformanceContexts);
+		}
+		if (vsBinding != null) {
+			builder.useVsBindings(vsBinding);
+		}
+		if (coConstraintsContext != null) {
+			builder.useCoConstraintsContext(coConstraintsContext);
+		}
+		if (slicingContext != null) {
+			builder.useSlicingContext(slicingContext);
+		}
+		validationContext = builder.getValidationContext();
+		Report r;
+		if (configuration == null) {
+			 r = Validation.validateNew(validationContext,content,id);
+		}else {
+			r = Validation.validateNewWithConfig(validationContext,content,id,configuration);
+		}
+		
+		String pr = new String(profile.readAllBytes());
+		String ctx = "";
+		if(context == Context.Free) ctx = "Context-Free"; else ctx = "Context-Based";
+		ArrayList<Section> mds = new ArrayList<Section>();
+		mds.add(service);
+		return EnhancedReport.fromValidation(r, content, pr, id, mds,ctx);
+	}
+
+
+
+	
+
 	
 
 
