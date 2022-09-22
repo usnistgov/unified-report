@@ -8,6 +8,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
+
 import gov.nist.healthcare.unified.enums.Context;
 import gov.nist.healthcare.unified.model.EnhancedReport;
 import gov.nist.healthcare.unified.model.Section;
@@ -150,7 +152,7 @@ public class ValidationProxy {
 			r = Validation.validateNewWithConfig(validationContext,content,id,configuration);
 		}
 		
-		String pr = new String(profile.readAllBytes());
+		String pr = IOUtils.toString(profile);//new String(profile.readAllBytes());
 		String ctx = "";
 		if(context == Context.Free) ctx = "Context-Free"; else ctx = "Context-Based";
 		ArrayList<Section> mds = new ArrayList<Section>();
