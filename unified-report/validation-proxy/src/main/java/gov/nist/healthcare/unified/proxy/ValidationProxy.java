@@ -22,6 +22,7 @@ import hl7.v2.validation.content.ConformanceContext;
 import hl7.v2.validation.content.DefaultConformanceContext;
 import hl7.v2.validation.vs.ValueSetLibrary;
 import hl7.v2.validation.vs.ValueSetLibraryImpl;
+import scala.collection.JavaConverters;
 import validator.Util;
 import validator.Validation;
 
@@ -120,18 +121,22 @@ public class ValidationProxy {
 		return EnhancedReport.fromValidation(r, content, pr, id, mds,ctx);
 	}
 	
-	public EnhancedReport validateNew(String content,InputStream profile,InputStream valueSetLibrary,scala.collection.immutable.List<InputStream> conformanceContexts,InputStream vsBinding , InputStream coConstraintsContext, InputStream slicingContext,  String id,Context context,Reader configuration) throws Exception{
+	public EnhancedReport validateNew(String content,String profile,InputStream valueSetLibrary,List<InputStream> cStreams,InputStream vsBinding , InputStream coConstraintsContext, InputStream slicingContext,  String id,Context context,Reader configuration) throws Exception{
 
 //		InputStream stream = new ByteArrayInputStream(profile.getBytes(StandardCharsets.UTF_8));
 		//check if not error here
-		Profile profileX = XMLDeserializer.deserialize(profile).get();
+//		Profile profileX = XMLDeserializer.deserialize(profile).get();
 
-		ValidationContextBuilder builder = new ValidationContextBuilder(profile);
+		
+		InputStream profileIS =IOUtils.toInputStream(profile, StandardCharsets.UTF_8);
+		ValidationContextBuilder builder = new ValidationContextBuilder(profileIS);
 
 		ValidationContext validationContext;
 		if (valueSetLibrary != null) {
 			builder.useValueSetLibrary(valueSetLibrary);
 		}
+		
+		scala.collection.immutable.List<InputStream> conformanceContexts = JavaConverters.collectionAsScalaIterable(cStreams).toList();
 		if (conformanceContexts != null) {
 			builder.useConformanceContext(conformanceContexts);
 		}
@@ -152,12 +157,67 @@ public class ValidationProxy {
 			r = Validation.validateNewWithConfig(validationContext,content,id,configuration);
 		}
 		
-		String pr = IOUtils.toString(profile);//new String(profile.readAllBytes());
+		
+		String pr = profile;//new String(profile.readAllBytes());
 		String ctx = "";
 		if(context == Context.Free) ctx = "Context-Free"; else ctx = "Context-Based";
 		ArrayList<Section> mds = new ArrayList<Section>();
 		mds.add(service);
-		return EnhancedReport.fromValidation(r, content, pr, id, mds,ctx);
+		return EnhancedReport.fromValidation(r, content, profile, id, mds,ctx);
+	}
+	
+	public EnhancedReport validateNew(String content,String profile,String valueSetLibrary,List<String> ccontexts,String vsBinding , String coConstraintsContext, String slicingContext,  String id,Context context,Reader configuration) throws Exception{
+
+		ValidationContext validationContext;
+//		InputStream stream = new ByteArrayInputStream(profile.getBytes(StandardCharsets.UTF_8));
+		//check if not error here
+//		Profile profileX = XMLDeserializer.deserialize(profile).get();
+
+		
+		InputStream profileIS =IOUtils.toInputStream(profile, StandardCharsets.UTF_8);
+		ValidationContextBuilder builder = new ValidationContextBuilder(profileIS);
+
+		if (valueSetLibrary != null) {
+			InputStream valueSetLibraryIS =IOUtils.toInputStream(valueSetLibrary, StandardCharsets.UTF_8);
+			builder.useValueSetLibrary(valueSetLibraryIS);
+		}
+		List<InputStream> cStreams = new ArrayList<InputStream>();	
+		for(String c : ccontexts) {
+			if (c != null) {
+				cStreams.add(IOUtils.toInputStream(c, StandardCharsets.UTF_8));
+			}
+		}		
+		scala.collection.immutable.List<InputStream> conformanceContexts = JavaConverters.collectionAsScalaIterable(cStreams).toList();
+		if (conformanceContexts != null) {
+			builder.useConformanceContext(conformanceContexts);
+		}
+		if (vsBinding != null) {
+			InputStream vsBindingIS =IOUtils.toInputStream(vsBinding, StandardCharsets.UTF_8);
+			builder.useVsBindings(vsBindingIS);
+		}
+		if (coConstraintsContext != null) {
+			InputStream coConstraintsContextIS =IOUtils.toInputStream(coConstraintsContext, StandardCharsets.UTF_8);
+			builder.useCoConstraintsContext(coConstraintsContextIS);
+		}
+		if (slicingContext != null) {
+			InputStream slicingContextIS =IOUtils.toInputStream(slicingContext, StandardCharsets.UTF_8);
+			builder.useSlicingContext(slicingContextIS);
+		}
+		validationContext = builder.getValidationContext();
+		Report r;
+		if (configuration == null) {
+			 r = Validation.validateNew(validationContext,content,id);
+		}else {
+			r = Validation.validateNewWithConfig(validationContext,content,id,configuration);
+		}
+		
+		
+		String pr = profile;//new String(profile.readAllBytes());
+		String ctx = "";
+		if(context == Context.Free) ctx = "Context-Free"; else ctx = "Context-Based";
+		ArrayList<Section> mds = new ArrayList<Section>();
+		mds.add(service);
+		return EnhancedReport.fromValidation(r, content, profile, id, mds,ctx);
 	}
 
 
