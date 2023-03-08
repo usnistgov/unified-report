@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>gov.nist.healthcare.hl7.v2.unifiedreport</groupId>
 	<artifactId>unified-report</artifactId>
-	<version>1.0.10-SNAPSHOT</version>
+	<version>1.0.10-LEGACY-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<build>
 		<plugins>
@@ -42,7 +42,7 @@
 		<dependency>
 			<groupId>gov.nist</groupId>
 			<artifactId>hl7-v2-validation</artifactId>
-			<version>1.4.2</version>
+			<version>1.5.5-lts.2.11</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -53,7 +53,7 @@
 		<dependency>
 			<groupId>gov.nist.hit.validation</groupId>
 			<artifactId>hit-wctp-validation</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.0.0</version>
 		</dependency>
 
 		<dependency>
