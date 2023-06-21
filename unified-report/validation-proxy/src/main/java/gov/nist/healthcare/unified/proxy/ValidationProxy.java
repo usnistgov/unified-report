@@ -149,6 +149,7 @@ public class ValidationProxy {
 		if (slicingContext != null) {
 			builder.useSlicingContext(slicingContext);
 		}
+		builder.setFFLegacy0396(true);
 		validationContext = builder.getValidationContext();
 		Report r;
 		if (configuration == null) {
@@ -203,6 +204,8 @@ public class ValidationProxy {
 			InputStream slicingContextIS =IOUtils.toInputStream(slicingContext, StandardCharsets.UTF_8);
 			builder.useSlicingContext(slicingContextIS);
 		}
+		
+		builder.setFFLegacy0396(true);
 		validationContext = builder.getValidationContext();
 		Report r;
 		if (configuration == null) {
