@@ -22,6 +22,7 @@ import hl7.v2.validation.content.ConformanceContext;
 import hl7.v2.validation.content.DefaultConformanceContext;
 import hl7.v2.validation.vs.ValueSetLibrary;
 import hl7.v2.validation.vs.ValueSetLibraryImpl;
+import org.apache.http.impl.client.CloseableHttpClient;
 import scala.collection.JavaConverters;
 import validator.Util;
 import validator.Validation;
@@ -121,7 +122,7 @@ public class ValidationProxy {
 		return EnhancedReport.fromValidation(r, content, pr, id, mds,ctx);
 	}
 	
-	public EnhancedReport validateNew(String content,String profile,InputStream valueSetLibrary,List<InputStream> cStreams,InputStream vsBinding , InputStream coConstraintsContext, InputStream slicingContext,  String id,Context context,Reader configuration) throws Exception{
+	public EnhancedReport validateNew(String content, String profile, InputStream valueSetLibrary, List<InputStream> cStreams, InputStream vsBinding , InputStream coConstraintsContext, InputStream slicingContext, String id, Context context, Reader configuration, CloseableHttpClient httpClient) throws Exception{
 
 //		InputStream stream = new ByteArrayInputStream(profile.getBytes(StandardCharsets.UTF_8));
 		//check if not error here
@@ -133,7 +134,11 @@ public class ValidationProxy {
 
 		ValidationContext validationContext;
 		if (valueSetLibrary != null) {
-			builder.useValueSetLibrary(valueSetLibrary);
+			builder.useDefaultValueSetFactory(
+					valueSetLibrary,
+					httpClient,
+					true
+			);
 		}
 		
 		scala.collection.immutable.List<InputStream> conformanceContexts = JavaConverters.collectionAsScalaIterable(cStreams).toList();
@@ -167,7 +172,7 @@ public class ValidationProxy {
 		return EnhancedReport.fromValidation(r, content, profile, id, mds,ctx);
 	}
 	
-	public EnhancedReport validateNew(String content,String profile,String valueSetLibrary,List<String> ccontexts,String vsBinding , String coConstraintsContext, String slicingContext,  String id,Context context,Reader configuration) throws Exception{
+	public EnhancedReport validateNew(String content,String profile,String valueSetLibrary,List<String> ccontexts,String vsBinding , String coConstraintsContext, String slicingContext,  String id,Context context,Reader configuration, CloseableHttpClient httpClient) throws Exception{
 
 		ValidationContext validationContext;
 //		InputStream stream = new ByteArrayInputStream(profile.getBytes(StandardCharsets.UTF_8));
@@ -180,7 +185,11 @@ public class ValidationProxy {
 
 		if (valueSetLibrary != null) {
 			InputStream valueSetLibraryIS =IOUtils.toInputStream(valueSetLibrary, StandardCharsets.UTF_8);
-			builder.useValueSetLibrary(valueSetLibraryIS);
+			builder.useDefaultValueSetFactory(
+					valueSetLibraryIS,
+					httpClient,
+					true
+			);
 		}
 		List<InputStream> cStreams = new ArrayList<InputStream>();	
 		for(String c : ccontexts) {
