@@ -564,7 +564,7 @@ public class HL7V2MessageReport {
 			 * 
 			 */
 			@XmlAccessorType(XmlAccessType.FIELD)
-			@XmlType(name = "", propOrder = { "line", "column", "path",
+			@XmlType(name = "", propOrder = { "line", "column", "path", "messageProfilePath", "messageProfilePositionPath", "messageInstancePathName", "messageInstancePositionPath",
 					"xPath", "profileElement" })
 			public static class Location {
 
@@ -574,6 +574,15 @@ public class HL7V2MessageReport {
 				protected Integer column;
 				@XmlElement(name = "Path")
 				protected String path;
+
+				@XmlElement(name = "MessageProfilePath")
+				protected String messageProfilePath;
+				@XmlElement(name = "MessageProfilePositionPath")
+				protected String messageProfilePositionPath;
+				@XmlElement(name = "MessageInstancePathName")
+				protected String messageInstancePathName;
+				@XmlElement(name = "MessageInstancePositionPath")
+				protected String messageInstancePositionPath;
 				@XmlElement(name = "XPath")
 				protected String xPath;
 				@XmlElement(name = "ProfileElement")
@@ -684,6 +693,37 @@ public class HL7V2MessageReport {
 					this.profileElement = value;
 				}
 
+				public String getMessageProfilePath() {
+					return messageProfilePath;
+				}
+
+				public void setMessageProfilePath(String messageProfilePath) {
+					this.messageProfilePath = messageProfilePath;
+				}
+
+				public String getMessageProfilePositionPath() {
+					return messageProfilePositionPath;
+				}
+
+				public void setMessageProfilePositionPath(String messageProfilePositionPath) {
+					this.messageProfilePositionPath = messageProfilePositionPath;
+				}
+
+				public String getMessageInstancePathName() {
+					return messageInstancePathName;
+				}
+
+				public void setMessageInstancePathName(String messageInstancePathName) {
+					this.messageInstancePathName = messageInstancePathName;
+				}
+
+				public String getMessageInstancePositionPath() {
+					return messageInstancePositionPath;
+				}
+
+				public void setMessageInstancePositionPath(String messageInstancePositionPath) {
+					this.messageInstancePositionPath = messageInstancePositionPath;
+				}
 			}
 
 		}

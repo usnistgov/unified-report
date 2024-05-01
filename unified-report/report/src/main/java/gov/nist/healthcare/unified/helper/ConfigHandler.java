@@ -11,13 +11,19 @@ import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigValue;
 
 public class ConfigHandler {
+
+		public static Config conf = ConfigFactory.load();
+
+		public static String getClassificationValue(String key) {
+			return conf.getString("report.classification." + key);
+		}
 	
 		public static JSONArray getFailuresInterpretation(){
 			
 			JSONArray failInter = new JSONArray();
 			ArrayList<String> detections = new ArrayList<String>();
 			Hashtable<String,ArrayList<String>> ar = new Hashtable<String,ArrayList<String>>();
-			Config conf = ConfigFactory.load();
+
 			Iterator<java.util.Map.Entry<String,ConfigValue>> it = conf.entrySet().iterator();
 			while(it.hasNext()){
 				java.util.Map.Entry<String,ConfigValue> e = it.next();

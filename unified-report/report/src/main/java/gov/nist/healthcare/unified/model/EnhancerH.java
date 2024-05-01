@@ -30,6 +30,14 @@ import org.w3c.dom.Document;
 
 public class EnhancerH {
 
+	private static final String CLASSIFICATION_ERROR = ConfigHandler.getClassificationValue("error").toUpperCase();
+	private static final String CLASSIFICATION_WARNING = ConfigHandler.getClassificationValue("warning").toUpperCase();
+	private static final String CLASSIFICATION_ALERT = ConfigHandler.getClassificationValue("alert").toUpperCase();
+	private static final String CLASSIFICATION_INFORMATIONAL = ConfigHandler.getClassificationValue("informational").toUpperCase();
+	private static final String CLASSIFICATION_AFFIRMATIVE = ConfigHandler.getClassificationValue("affirmative").toUpperCase();
+	private static final String CLASSIFICATION_NOTE = ConfigHandler.getClassificationValue("note").toUpperCase();
+	private static final String CLASSIFICATION_SPEC_ERROR = ConfigHandler.getClassificationValue("spec-error").toUpperCase();
+
 	public static void enhanceHeader(EnhancedReport er, ArrayList<Section> mds,
 			String msg) {
 		for (Section s : mds) {
@@ -73,6 +81,8 @@ public class EnhancerH {
 		}
 	}
 
+
+
 	public static void enhanceWithReport(EnhancedReport er, Report r) {
 		int error = 0;
 		int warning = 0;
@@ -80,26 +90,25 @@ public class EnhancerH {
 		int informational = 0;
 		int affirmative = 0;
 		int specerror = 0;
+		int note = 0;
 		ArrayList<Section> entries = new ArrayList<Section>();
 		for (String k : r.getEntries().keySet()) {
 			for (Entry e : r.getEntries().get(k)) {
 				entries.add(format(e));
-				if (e.getClassification().toUpperCase().equals("AFFIRMATIVE")) {
+				if (e.getClassification().toUpperCase().equals(CLASSIFICATION_AFFIRMATIVE)) {
 					affirmative++;
-				} else if (e.getClassification().toUpperCase().equals("ALERT")) {
+				} else if (e.getClassification().toUpperCase().equals(CLASSIFICATION_ALERT)) {
 					alert++;
-				} else if (e.getClassification().toUpperCase().equals("ERROR")) {
+				} else if (e.getClassification().toUpperCase().equals(CLASSIFICATION_ERROR)) {
 					error++;
-				} else if (e.getClassification().toUpperCase().equals("INFO")
-						|| e.getClassification().toUpperCase()
-								.equals("INFORMATIONAL")) {
+				} else if (e.getClassification().toUpperCase().equals(CLASSIFICATION_INFORMATIONAL)) {
 					informational++;
-				} else if (e.getClassification().toUpperCase()
-						.equals("WARNING")) {
+				} else if (e.getClassification().toUpperCase().equals(CLASSIFICATION_WARNING)) {
 					warning++;
-				} else if (e.getClassification().toUpperCase()
-						.equals("SPEC_ERROR")) {
+				} else if (e.getClassification().toUpperCase().equals(CLASSIFICATION_SPEC_ERROR)) {
 					specerror++;
+				} else if (e.getClassification().toUpperCase().equals(CLASSIFICATION_NOTE)) {
+					note++;
 				}
 			}
 		}
@@ -109,8 +118,9 @@ public class EnhancerH {
 		er.getMetadata().put("counts.alert", alert);
 		er.getMetadata().put("counts.informational", informational);
 		er.getMetadata().put("counts.affirmative", affirmative);
-		er.getMetadata().put("counts.specerror", specerror);
-		
+		er.getMetadata().put("counts.spec-error", specerror);
+		er.getMetadata().put("counts.note", note);
+
 		if (error == 0)
 			er.getMetadata().put("validationStatus", "true");
 		else

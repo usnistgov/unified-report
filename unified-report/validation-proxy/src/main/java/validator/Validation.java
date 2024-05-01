@@ -17,8 +17,33 @@ import hl7.v2.validation.content.ConformanceContext;
 import hl7.v2.validation.content.DefaultConformanceContext;
 import hl7.v2.validation.vs.ValueSetLibrary;
 import hl7.v2.validation.vs.ValueSetLibraryImpl;
+import hl7.v2.validation.vs.factory.ValueSetFactory;
+import hl7.v2.validation.vs.factory.impl.java.DefaultValueSetFactory;
+import hl7.v2.validation.vs.factory.impl.java.DefaultValueSetFactoryConfiguration;
+import org.apache.http.impl.client.CloseableHttpClient;
 
 public class Validation {
+
+	public static ValueSetFactory getDefaultValueSetFactoryWithoutHTTP(ValueSetLibrary library) {
+		return new DefaultValueSetFactory(
+				library,
+				new DefaultValueSetFactoryConfiguration(
+						true,
+						false
+				)
+		);
+	}
+
+	public static ValueSetFactory getDefaultValueSetFactoryWithHTTP(CloseableHttpClient client, ValueSetLibrary library) {
+		return new DefaultValueSetFactory(
+				client,
+				library,
+				new DefaultValueSetFactoryConfiguration(
+						true,
+						true
+				)
+		);
+	}
 	
 	public static Report validate(String profile,String constraint,String vs,String message,String id) throws Exception{
 //		InputStream is_pro = Validation.class.getResourceAsStream(profile);
@@ -31,15 +56,15 @@ public class Validation {
 //		ConformanceContext c = DefaultConformanceContext.apply(is_cons).get();
 //		Map<String, Function3<Plugin, Element, Separators, EvalResult>> pluginMap = Map$.MODULE$.empty();
 //		ValueSetLibrary valueSetLibrary = ValueSetLibrary.apply(is_vs).get();
-		return new SyncHL7Validator(is_pro, is_vs, is_cons).check(message, id);
+		return new SyncHL7Validator(is_pro, getDefaultValueSetFactoryWithoutHTTP(is_vs), is_cons).check(message, id);
 	}
 	
 	public static Report validate(Profile profile,ConformanceContext constraint,ValueSetLibrary vs,String message,String id,Reader configuration) throws Exception{			
-		return new SyncHL7Validator(profile, vs, constraint).checkUsingConfiguration(message, id,configuration);
+		return new SyncHL7Validator(profile, getDefaultValueSetFactoryWithoutHTTP(vs), constraint).checkUsingConfiguration(message, id,configuration);
 	}
 	
 	public static Report validate(Profile profile,ConformanceContext constraint,ValueSetLibrary vs,String message,String id) throws Exception{	
-		return new SyncHL7Validator(profile, vs, constraint).check(message, id);
+		return new SyncHL7Validator(profile, getDefaultValueSetFactoryWithoutHTTP(vs), constraint).check(message, id);
 	}
 	
 	

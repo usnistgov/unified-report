@@ -140,6 +140,8 @@ public class XMLConverter implements Converter {
 						rh.setInfoCount(Int(tmp.toString()));
 					if (cursor.accessPrimitive("spec-error", tmp))
 						rh.setSpecErrorCount(Int(tmp.toString()));
+					if (cursor.accessPrimitive("note", tmp))
+						rh.setNoteCount(Int(tmp.toString()));
 				}
 
 				if (mds.accessComplex("message", cursor)) {
@@ -207,6 +209,16 @@ public class XMLConverter implements Converter {
 						loc.setLine(Int(sb.toString()));
 					if (detection.accessPrimitive("path", sb))
 						loc.setPath(sb.toString());
+
+					if (detection.accessPrimitive("messageInstancePathName", sb))
+						loc.setMessageInstancePathName(sb.toString());
+					if (detection.accessPrimitive("messageInstancePositionPath", sb))
+						loc.setMessageInstancePositionPath(sb.toString());
+					if (detection.accessPrimitive("messageProfilePath", sb))
+						loc.setMessageProfilePath(sb.toString());
+					if (detection.accessPrimitive("messageProfilePositionPath", sb))
+						loc.setMessageProfilePositionPath(sb.toString());
+
 					tmp.setResult(cl.getName().toString().toLowerCase());
 					tmp.setType(s_cat.toString().toUpperCase()
 							.replace(" ", "_").replace("-", "_"));
@@ -347,7 +359,8 @@ public class XMLConverter implements Converter {
 						.put("error", Int(rh.getErrorCount()))
 						.put("warning", Int(rh.getWarningCount()))
 						.put("informational", Int(rh.getInfoCount()))
-						.put("spec-error", Int(rh.getSpecErrorCount()));
+						.put("spec-error", Int(rh.getSpecErrorCount()))
+                        .put("note", Int(rh.getNoteCount()));
 				metadata.put(tmp);
 				if(rh.getTestCaseReference() != null){
 					tmp = new Section("testCase");
@@ -393,6 +406,10 @@ public class XMLConverter implements Converter {
 						.put("column", Int(loc.getColumn()))
 						.put("line", Int(loc.getLine()))
 						.put("path", loc.getPath())
+						.put("messageProfilePath", loc.getMessageProfilePath())
+						.put("messageProfilePositionPath", loc.getMessageProfilePositionPath())
+						.put("messageInstancePathName", loc.getMessageInstancePathName())
+						.put("messageInstancePositionPath", loc.getMessageInstancePositionPath())
 						.put("category", asser.getType())
 						.put("classification", asser.getResult().toLowerCase());
 

@@ -108,6 +108,14 @@ public class ModelConverter implements Converter {
 			e.setColumn(Int(ref.value));
 		if (s.accessPrimitive("path", ref))
 			e.setPath(ref.value);
+		if (s.accessPrimitive("messageProfilePath", ref))
+			e.setMessageProfilePath(ref.value);
+		if (s.accessPrimitive("messageProfilePositionPath", ref))
+			e.setMessageProfilePositionPath(ref.value);
+		if (s.accessPrimitive("messageInstancePathName", ref))
+			e.setMessageInstancePathName(ref.value);
+		if (s.accessPrimitive("messageInstancePositionPath", ref))
+			e.setMessageInstancePositionPath(ref.value);
 		if (s.accessPrimitive("description", ref))
 			e.setDescription(ref.value);
 		if (s.accessPrimitive("classification", ref))

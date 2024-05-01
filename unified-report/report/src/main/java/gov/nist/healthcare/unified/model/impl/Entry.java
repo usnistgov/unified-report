@@ -6,6 +6,10 @@ public class Entry {
 	private int line;
 	private int column;
 	private String path;
+	private String messageProfilePath;
+	private String messageProfilePositionPath;
+	private String messageInstancePathName;
+	private String messageInstancePositionPath;
 	private String description;
 	private String category;
 	private String classification;
@@ -62,16 +66,41 @@ public class Entry {
 	public void setMetadata(AssertionMetaData metadata) {
 		this.metadata = metadata;
 	}
-	
+
+	public String getMessageProfilePath() {
+		return messageProfilePath;
+	}
+
+	public void setMessageProfilePath(String messageProfilePath) {
+		this.messageProfilePath = messageProfilePath;
+	}
+
+	public String getMessageProfilePositionPath() {
+		return messageProfilePositionPath;
+	}
+
+	public void setMessageProfilePositionPath(String messageProfilePositionPath) {
+		this.messageProfilePositionPath = messageProfilePositionPath;
+	}
+
+	public String getMessageInstancePathName() {
+		return messageInstancePathName;
+	}
+
+	public void setMessageInstancePathName(String messageInstancePathName) {
+		this.messageInstancePathName = messageInstancePathName;
+	}
+
+	public String getMessageInstancePositionPath() {
+		return messageInstancePositionPath;
+	}
+
+	public void setMessageInstancePositionPath(String messageInstancePositionPath) {
+		this.messageInstancePositionPath = messageInstancePositionPath;
+	}
+
 	@Override
 	public String toString() {
-		return "Entry [line=" + line + ", column=" + column + ", path=" + path
-				+ ", description=" + description + ", category=" + category
-				+ ", classification=" + classification + ", stacktrace="
-				+ stacktrace + ", metadata=" + metadata + "]";
+		return "Entry{" + "line=" + line + ", column=" + column + ", path='" + path + '\'' + ", messageProfilePath='" + messageProfilePath + '\'' + ", messageProfilePositionPath='" + messageProfilePositionPath + '\'' + ", messageInstancePathName='" + messageInstancePathName + '\'' + ", messageInstancePositionPath='" + messageInstancePositionPath + '\'' + ", description='" + description + '\'' + ", category='" + category + '\'' + ", classification='" + classification + '\'' + ", stacktrace=" + stacktrace + ", metadata=" + metadata + '}';
 	}
-	
-	
-	
-	
 }
