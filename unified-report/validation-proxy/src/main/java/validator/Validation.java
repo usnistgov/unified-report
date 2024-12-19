@@ -45,27 +45,20 @@ public class Validation {
 		);
 	}
 	
-	public static Report validate(String profile,String constraint,String vs,String message,String id) throws Exception{
-//		InputStream is_pro = Validation.class.getResourceAsStream(profile);
-//		InputStream is_cons = Validation.class.getResourceAsStream(constraint);
-//		InputStream is_vs = Validation.class.getResourceAsStream(vs);
-		Profile is_pro = getProfile(profile);
-		ConformanceContext is_cons = getConformanceContext(constraint);
-		ValueSetLibrary is_vs = getValueSetLibrary(vs);
-		
-//		ConformanceContext c = DefaultConformanceContext.apply(is_cons).get();
-//		Map<String, Function3<Plugin, Element, Separators, EvalResult>> pluginMap = Map$.MODULE$.empty();
-//		ValueSetLibrary valueSetLibrary = ValueSetLibrary.apply(is_vs).get();
-		return new SyncHL7Validator(is_pro, getDefaultValueSetFactoryWithoutHTTP(is_vs), is_cons).check(message, id);
-	}
-	
-	public static Report validate(Profile profile,ConformanceContext constraint,ValueSetLibrary vs,String message,String id,Reader configuration) throws Exception{			
-		return new SyncHL7Validator(profile, getDefaultValueSetFactoryWithoutHTTP(vs), constraint).checkUsingConfiguration(message, id,configuration);
-	}
-	
-	public static Report validate(Profile profile,ConformanceContext constraint,ValueSetLibrary vs,String message,String id) throws Exception{	
-		return new SyncHL7Validator(profile, getDefaultValueSetFactoryWithoutHTTP(vs), constraint).check(message, id);
-	}
+//	public static Report validate(String profile,String constraint,String vs,String message,String id) throws Exception{
+//		Profile is_pro = getProfile(profile);
+//		ConformanceContext is_cons = getConformanceContext(constraint);
+//		ValueSetLibrary is_vs = getValueSetLibrary(vs);		
+//		return new SyncHL7Validator(is_pro, getDefaultValueSetFactoryWithoutHTTP(is_vs), is_cons).check(message, id);
+//	}
+//	
+//	public static Report validate(Profile profile,ConformanceContext constraint,ValueSetLibrary vs,String message,String id,Reader configuration) throws Exception{			
+//		return new SyncHL7Validator(profile, getDefaultValueSetFactoryWithoutHTTP(vs), constraint).checkUsingConfiguration(message, id,configuration);
+//	}
+//	
+//	public static Report validate(Profile profile,ConformanceContext constraint,ValueSetLibrary vs,String message,String id) throws Exception{	
+//		return new SyncHL7Validator(profile, getDefaultValueSetFactoryWithoutHTTP(vs), constraint).check(message, id);
+//	}
 	
 	
 	public static Report validateNew(ValidationContext context,String message,String id) throws Exception{	
@@ -77,11 +70,11 @@ public class Validation {
 	}
 	
 	
-	public static Report validate(String xmlFile, List<Schema> schemas, List<String> schematrons, String phase){
+	public static Report validateXML(String xmlFile, List<Schema> schemas, List<String> schematrons, String phase){
 		return gov.nist.hit.xml.Validator.validate(xmlFile,schemas,schematrons,phase);
 	}
 	
-	public static Report validate(String wctpFile){
+	public static Report validateWCTP(String wctpFile){
 		return gov.nist.hit.wctp.WCTPValidation.generic(wctpFile);
 	}
 	
