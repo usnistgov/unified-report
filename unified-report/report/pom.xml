@@ -1,16 +1,23 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>gov.nist.healthcare.hl7.v2.unifiedreport</groupId>
-    <artifactId>unified-report</artifactId>
-    <version>1.0.11-SNAPSHOT</version>
-  </parent>
-  <artifactId>report</artifactId>
-  <dependencies>
-  	<dependency>
-	  	<groupId>gov.nist.healthcare.hl7.v2.unifiedreport</groupId>
-	    <artifactId>xml-schema</artifactId>
-	    <version>${parent.version}</version>
-  	</dependency>
-  </dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>gov.nist.healthcare.hl7.v2.unifiedreport</groupId>
+		<artifactId>unified-report</artifactId>
+		<version>1.0.11-SNAPSHOT</version>
+	</parent>
+	<artifactId>report</artifactId>
+	<dependencies>
+		<dependency>
+			<groupId>gov.nist.healthcare.hl7.v2.unifiedreport</groupId>
+			<artifactId>xml-schema</artifactId>
+			<version>${parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.typesafe</groupId>
+			<artifactId>config</artifactId>
+			<version>1.4.2</version>
+		</dependency>
+	</dependencies>
 </project>
