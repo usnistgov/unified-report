@@ -17,33 +17,29 @@ import hl7.v2.validation.content.ConformanceContext;
 import hl7.v2.validation.content.DefaultConformanceContext;
 import hl7.v2.validation.vs.ValueSetLibrary;
 import hl7.v2.validation.vs.ValueSetLibraryImpl;
-import hl7.v2.validation.vs.factory.ValueSetFactory;
-import hl7.v2.validation.vs.factory.impl.java.DefaultValueSetFactory;
-import hl7.v2.validation.vs.factory.impl.java.DefaultValueSetFactoryConfiguration;
-import org.apache.http.impl.client.CloseableHttpClient;
 
 public class Validation {
 
-	public static ValueSetFactory getDefaultValueSetFactoryWithoutHTTP(ValueSetLibrary library) {
-		return new DefaultValueSetFactory(
-				library,
-				new DefaultValueSetFactoryConfiguration(
-						true,
-						false
-				)
-		);
-	}
-
-	public static ValueSetFactory getDefaultValueSetFactoryWithHTTP(CloseableHttpClient client, ValueSetLibrary library) {
-		return new DefaultValueSetFactory(
-				client,
-				library,
-				new DefaultValueSetFactoryConfiguration(
-						true,
-						true
-				)
-		);
-	}
+//	public static ValueSetFactory getDefaultValueSetFactoryWithoutHTTP(ValueSetLibrary library) {
+//		return new DefaultValueSetFactory(
+//				library,
+//				new DefaultValueSetFactoryConfiguration(
+//						true,
+//						false
+//				)
+//		);
+//	}
+//
+//	public static ValueSetFactory getDefaultValueSetFactoryWithHTTP(CloseableHttpClient client, ValueSetLibrary library) {
+//		return new DefaultValueSetFactory(
+//				client,
+//				library,
+//				new DefaultValueSetFactoryConfiguration(
+//						true,
+//						true
+//				)
+//		);
+//	}
 	
 //	public static Report validate(String profile,String constraint,String vs,String message,String id) throws Exception{
 //		Profile is_pro = getProfile(profile);
@@ -68,7 +64,6 @@ public class Validation {
 	public static Report validateNewWithConfig(ValidationContext context,String message,String id,Reader configuration) throws Exception{	
 		return new SyncHL7Validator(context).checkUsingConfiguration(message, id, configuration);
 	}
-	
 	
 	public static Report validateXML(String xmlFile, List<Schema> schemas, List<String> schematrons, String phase){
 		return gov.nist.hit.xml.Validator.validate(xmlFile,schemas,schematrons,phase);
