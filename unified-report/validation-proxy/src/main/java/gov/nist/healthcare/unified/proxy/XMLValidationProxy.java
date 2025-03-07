@@ -27,7 +27,7 @@ public class XMLValidationProxy {
     public EnhancedReport validate(String msg, List<Schema> schemas, List<String> schematrons, String phase, Context context) {
         try {
             //String content = Util.streamAsString(msg);
-            Report validationReport = Validation.validate(msg, schemas, schematrons, phase);
+            Report validationReport = Validation.validateXML(msg, schemas, schematrons, phase);
             String ctx = "";
             if (context == Context.Free) ctx = "Context-Free";
             else ctx = "Context-Based";

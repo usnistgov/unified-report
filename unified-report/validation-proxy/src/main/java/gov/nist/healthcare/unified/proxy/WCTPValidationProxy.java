@@ -23,7 +23,7 @@ public class WCTPValidationProxy {
     public EnhancedReport validate(String msg) {
         try {
             //String content = Util.streamAsString(msg);
-            Report validationReport = Validation.validate(msg);
+            Report validationReport = Validation.validateWCTP(msg);
 //            String ctx = "";
 //            if (context == Context.Free) ctx = "Context-Free";
 //            else ctx = "Context-Based";
