@@ -57,11 +57,11 @@ public class Validation {
 //	}
 	
 	
-	public static Report validateNew(ValidationContext context,String message,String id) throws Exception{	
+	public static Report validateHL7v2(ValidationContext context,String message,String id) throws Exception{	
 		return new SyncHL7Validator(context).check(message, id);
 	}
 	
-	public static Report validateNewWithConfig(ValidationContext context,String message,String id,Reader configuration) throws Exception{	
+	public static Report validateHL7v2WithConfig(ValidationContext context,String message,String id,Reader configuration) throws Exception{	
 		return new SyncHL7Validator(context).checkUsingConfiguration(message, id, configuration);
 	}
 	

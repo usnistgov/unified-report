@@ -1,6 +1,7 @@
 package gov.nist.healthcare.unified.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -19,7 +20,12 @@ public class ValidationBody {
 	private String coConstraints;
 	private String slicings;
 	
-
+	private String serviceName;
+	private String serviceProvider;
+	private String context;
+	
+	private HashMap<String,String> apiKeys = new HashMap<String, String>();
+	
 	public String getContent() {
 		return content;
 	}
@@ -80,6 +86,31 @@ public class ValidationBody {
 	public void setSlicings(String slicings) {
 		this.slicings = slicings;
 	}
+	public String getServiceName() {
+		return serviceName;
+	}
+	public void setServiceName(String serviceName) {
+		this.serviceName = serviceName;
+	}
+	public String getServiceProvider() {
+		return serviceProvider;
+	}
+	public void setServiceProvider(String serviceProvider) {
+		this.serviceProvider = serviceProvider;
+	}
+	public String getContext() {
+		return context;
+	}
+	public void setContext(String context) {
+		this.context = context;
+	}
+	public HashMap<String, String> getApiKeys() {
+		return apiKeys;
+	}
+	public void setApiKeys(HashMap<String, String> apiKeys) {
+		this.apiKeys = apiKeys;
+	}
+	
 	
 	
 
