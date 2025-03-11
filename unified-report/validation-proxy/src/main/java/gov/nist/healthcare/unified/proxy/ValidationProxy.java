@@ -3,6 +3,7 @@ package gov.nist.healthcare.unified.proxy;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,7 +72,7 @@ public class ValidationProxy {
 	}
 
 	public EnhancedReport validate(String content, String profile, String valueSetLibrary, List<String> constraintsList, String vsBinding,
-			String coConstraintsContext, String slicingContext, String conformanceProfileId, Context context, Reader configuration,
+			String coConstraintsContext, String slicingContext, String conformanceProfileId, Context context, String configuration,
 			HashMap<String, String> apikeys, String externalValidationVersion) throws Exception {
 		Map<String, String> urls = propertiesLoader.getValidationUrlsMap();
 
@@ -89,7 +90,7 @@ public class ValidationProxy {
 
 	// WIP external call to validation to get report
 	public EnhancedReport validateExternally(String content, String profile, String valueSetLibrary, List<String> ccontexts, String vsBinding,
-			String coConstraintsContext, String slicingContext, String id, Context context, Reader configuration, HashMap<String, String> apikeys,
+			String coConstraintsContext, String slicingContext, String id, Context context, String configuration, HashMap<String, String> apikeys,
 			String externalValidationVersion) throws Exception {
 
 		Map<String, String> urls = propertiesLoader.getValidationUrlsMap();
@@ -109,7 +110,7 @@ public class ValidationProxy {
 		vb.setSlicings(slicingContext);
 		vb.setContent(content);
 		vb.setId(id);
-		vb.setConfig(null);
+		vb.setConfig(configuration);
 		vb.setServiceName(service.getString("name"));
 		vb.setServiceProvider(service.getString("provider"));
 		vb.setContext(contextString);
@@ -133,9 +134,9 @@ public class ValidationProxy {
 
 	//validate locally for better performance with the latest validation engine.
 	public EnhancedReport validateLocally(String content, String profile, String valueSetLibrary, List<String> ccontexts, String vsBinding,
-			String coConstraintsContext, String slicingContext, String id, Context context, Reader configuration, HashMap<String, String> apikeys)
+			String coConstraintsContext, String slicingContext, String id, Context context, String configuration, HashMap<String, String> apikeys)
 			throws Exception {
-
+		Report r;
 		// configure external value set validation/fetching
 		SSLContextBuilder sslBuilder = new SSLContextBuilder();
 		RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(2 * 1000).setConnectTimeout(2 * 1000).setSocketTimeout(2 * 1000)
@@ -196,11 +197,10 @@ public class ValidationProxy {
 		builder.setFFLegacy0396(true);
 		validationContext = builder.getValidationContext();
 
-		Report r;
 		if (configuration == null) {
 			r = Validation.validateHL7v2(validationContext, content, id);
 		} else {
-			r = Validation.validateHL7v2WithConfig(validationContext, content, id, configuration);
+			r = Validation.validateHL7v2WithConfig(validationContext, content, id,new StringReader(configuration));
 		}
 
 		String contextString = "";
