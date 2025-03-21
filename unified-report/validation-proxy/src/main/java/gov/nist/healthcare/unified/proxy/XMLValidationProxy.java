@@ -1,17 +1,17 @@
 package gov.nist.healthcare.unified.proxy;
 
 
-import java.util.List;
 import java.util.ArrayList;
-
-import gov.nist.healthcare.unified.model.EnhancerH;
-import validator.Validation;
-import gov.nist.healthcare.unified.enums.Context;
-import gov.nist.healthcare.unified.model.EnhancedReport;
-import gov.nist.healthcare.unified.model.Section;
-import gov.nist.validation.report.Report;
+import java.util.List;
 
 import javax.xml.validation.Schema;
+
+import gov.nist.healthcare.unified.enums.Context;
+import gov.nist.healthcare.unified.model.EnhancedReport;
+import gov.nist.healthcare.unified.model.EnhancerH;
+import gov.nist.healthcare.unified.model.Section;
+import gov.nist.validation.report.Report;
+import validator.Validation;
 
 public class XMLValidationProxy {
 

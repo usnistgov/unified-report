@@ -21,9 +21,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.ssl.SSLContextBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
@@ -32,7 +30,6 @@ import gov.nist.healthcare.unified.enums.Context;
 import gov.nist.healthcare.unified.model.EnhancedReport;
 import gov.nist.healthcare.unified.model.Section;
 import gov.nist.healthcare.unified.model.ValidationBody;
-import gov.nist.healthcare.unified.service.HL7v2ValidationPropertiesLoader;
 import gov.nist.validation.report.Report;
 import hl7.v2.validation.ValidationContext;
 import hl7.v2.validation.ValidationContextBuilder;
@@ -45,14 +42,14 @@ import okhttp3.Response;
 import scala.collection.JavaConverters;
 import validator.Validation;
 
-@PropertySources({ @PropertySource(value = { "classpath:validation-service-config.properties" }, ignoreResourceNotFound = true) })
+
 @Component
 public class ValidationProxy {
 
 	private Section service;
 
-	@Autowired
-	private HL7v2ValidationPropertiesLoader propertiesLoader;
+	@Value("${validation.urls:#{null}}")
+	private Map<String, String> urls;
 
 	public ValidationProxy() {
 	}
@@ -74,9 +71,7 @@ public class ValidationProxy {
 	public EnhancedReport validate(String content, String profile, String valueSetLibrary, List<String> constraintsList, String vsBinding,
 			String coConstraintsContext, String slicingContext, String conformanceProfileId, Context context, String configuration,
 			HashMap<String, String> apikeys, String externalValidationVersion) throws Exception {
-		Map<String, String> urls = propertiesLoader.getValidationUrlsMap();
-
-		if (externalValidationVersion == null || externalValidationVersion.equalsIgnoreCase(buildinfo.Info.version()) || urls.get(externalValidationVersion) == null) {
+		if (externalValidationVersion == null || externalValidationVersion.equalsIgnoreCase(buildinfo.Info.version()) || urls == null || urls.get(externalValidationVersion) == null) {
 			return validateLocally(content, profile, valueSetLibrary, constraintsList, vsBinding, coConstraintsContext, slicingContext, conformanceProfileId,
 					context, configuration, apikeys);
 		} else {
@@ -93,7 +88,6 @@ public class ValidationProxy {
 			String coConstraintsContext, String slicingContext, String id, Context context, String configuration, HashMap<String, String> apikeys,
 			String externalValidationVersion) throws Exception {
 
-		Map<String, String> urls = propertiesLoader.getValidationUrlsMap();
 		OkHttpClient client = new OkHttpClient();
 		String contextString = "";
 		if (context == Context.Free)
@@ -118,7 +112,6 @@ public class ValidationProxy {
 
 		Gson gson = new Gson();
 		String json = gson.toJson(vb);
-
 		RequestBody body = RequestBody.create(json, MediaType.get("application/json; charset=utf-8"));
 		Request request = new Request.Builder().url(urls.get(externalValidationVersion)).post(body).build();
 
