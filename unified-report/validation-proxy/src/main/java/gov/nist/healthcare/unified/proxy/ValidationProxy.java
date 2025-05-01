@@ -48,7 +48,7 @@ public class ValidationProxy {
 
 	private Section service;
 
-	@Value("${validation.urls:#{null}}")
+	@Value("#{${validation.urls:{null}}}")
 	private Map<String, String> urls;
 
 	public ValidationProxy() {
