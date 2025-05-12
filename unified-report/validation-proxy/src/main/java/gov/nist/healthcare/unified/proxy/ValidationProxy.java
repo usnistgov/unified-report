@@ -19,6 +19,7 @@ import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.springframework.beans.factory.annotation.Value;
@@ -135,7 +136,10 @@ public class ValidationProxy {
 		RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(2 * 1000).setConnectTimeout(2 * 1000).setSocketTimeout(2 * 1000)
 				.build();
 		SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslBuilder.build(), NoopHostnameVerifier.INSTANCE);
-
+		PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
+		cm.setMaxTotal(10); // Increase the maximum number of connections
+//		cm.setDefaultMaxPerRoute(10);
+		
 		CloseableHttpClient httpClient = HttpClients.custom().setDefaultRequestConfig(requestConfig).disableCookieManagement()
 				.setSSLSocketFactory(socketFactory).addInterceptorFirst(new HttpRequestInterceptor() {
 					@Override
@@ -144,8 +148,9 @@ public class ValidationProxy {
 						request.addHeader("X-API-KEY",
 								apikeys.get(context.getAttribute(ExternalValueSetClient.HTTP_CONTEXT_VS_BINDING_IDENTIFIER).toString()));
 					}
-				}).build();
+				}).setConnectionManager(cm).build();
 
+		
 		InputStream profileIS = IOUtils.toInputStream(profile, StandardCharsets.UTF_8);
 		ValidationContextBuilder builder = new ValidationContextBuilder(profileIS);
 
@@ -173,6 +178,7 @@ public class ValidationProxy {
 		if (valueSetLibrary != null) {
 			builder.useDefaultValueSetFactory(valueSetLibraryIS, httpClient, true);
 		}
+		
 
 		scala.collection.immutable.List<InputStream> conformanceContexts = JavaConverters.collectionAsScalaIterable(cStreams).toList();
 		if (conformanceContexts != null) {
