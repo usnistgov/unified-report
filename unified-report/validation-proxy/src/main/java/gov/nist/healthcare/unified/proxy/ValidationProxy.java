@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import hl7.v2.validation.vs.factory.impl.java.ValueSetProxy;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
@@ -126,9 +127,16 @@ public class ValidationProxy {
 
 	}
 
+	// Overload of validateLocally for backwards compatibility
+	public EnhancedReport validateLocally(String content, String profile, String valueSetLibrary, List<String> ccontexts, String vsBinding,
+	        String coConstraintsContext, String slicingContext, String id, Context context, String configuration, HashMap<String, String> apikeys)
+			throws Exception {
+		return validateLocally(content, profile, valueSetLibrary, ccontexts, vsBinding, coConstraintsContext, slicingContext, id, context, configuration, apikeys, null);
+	}
+
 	//validate locally for better performance with the latest validation engine.
 	public EnhancedReport validateLocally(String content, String profile, String valueSetLibrary, List<String> ccontexts, String vsBinding,
-			String coConstraintsContext, String slicingContext, String id, Context context, String configuration, HashMap<String, String> apikeys)
+			String coConstraintsContext, String slicingContext, String id, Context context, String configuration, HashMap<String, String> apikeys, Map<String, Class<? extends ValueSetProxy>> valueSetProxies)
 			throws Exception {
 		Report r;
 		// configure external value set validation/fetching
@@ -192,6 +200,9 @@ public class ValidationProxy {
 		}
 		if (slicingContext != null) {
 			builder.useSlicingContext(slicingContextIS);
+		}
+		if(valueSetProxies != null) {
+			valueSetProxies.forEach(builder::useValueSetProxy);
 		}
 		builder.setFFLegacy0396(true);
 		validationContext = builder.getValidationContext();
