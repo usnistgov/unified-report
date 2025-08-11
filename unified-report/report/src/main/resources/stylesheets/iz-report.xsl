@@ -19,7 +19,7 @@
 		<html>
 			<head>
 				<link rel="stylesheet" type="text/css" href="report.css" />
-				<script type="text/javascript">
+				<script type="text/javascript" integrity="sha256-f9h3HRjL1VUqG5+6Pw2xrc2lksENHrSDJStWs/Qrh04=" crossorigin="anonymous">
 					function toggle_visibility(id, elm) {
 					var e =
 					document.getElementById(id);

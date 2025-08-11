@@ -71,14 +71,22 @@ public class ValidationProxy {
 	}
 
 	public EnhancedReport validate(String content, String profile, String valueSetLibrary, List<String> constraintsList, String vsBinding,
-			String coConstraintsContext, String slicingContext, String conformanceProfileId, Context context, String configuration,
-			HashMap<String, String> apikeys, String externalValidationVersion) throws Exception {
+			String coConstraintsContext, String slicingContext, String conformanceProfileId,Map<String,Object> options) throws Exception {
+		
+		//get options
+				Context context = (Context)options.get("context"); 
+				String configuration = (String)options.get("configuration"); 
+				HashMap<String, String> apikeys = (HashMap<String, String>)options.get("apikeys"); 
+				String externalValidationVersion = (String)options.get("externalValidationVersion");
+				Boolean useHttp = (Boolean)options.get("useHttp");
+				Map<String, Class<? extends ValueSetProxy>> valueSetProxies = ( Map<String, Class<? extends ValueSetProxy>>)options.get("valueSetProxies");
+		
 		if (externalValidationVersion == null || externalValidationVersion.equalsIgnoreCase(buildinfo.Info.version()) || urls == null || urls.get(externalValidationVersion) == null) {
 			return validateLocally(content, profile, valueSetLibrary, constraintsList, vsBinding, coConstraintsContext, slicingContext, conformanceProfileId,
-					context, configuration, apikeys);
+					context, configuration, apikeys, useHttp,valueSetProxies);
 		} else {
 			return validateExternally(content, profile, valueSetLibrary, constraintsList, vsBinding, coConstraintsContext, slicingContext, conformanceProfileId,
-					context, configuration, apikeys, externalValidationVersion);
+					context, configuration, apikeys, externalValidationVersion, useHttp);
 		}
 
 	}
@@ -88,8 +96,10 @@ public class ValidationProxy {
 	// WIP external call to validation to get report
 	public EnhancedReport validateExternally(String content, String profile, String valueSetLibrary, List<String> ccontexts, String vsBinding,
 			String coConstraintsContext, String slicingContext, String id, Context context, String configuration, HashMap<String, String> apikeys,
-			String externalValidationVersion) throws Exception {
+			String externalValidationVersion, Boolean useHttp) throws Exception {
 
+		
+		
 		OkHttpClient client = new OkHttpClient();
 		String contextString = "";
 		if (context == Context.Free)
@@ -131,12 +141,13 @@ public class ValidationProxy {
 	public EnhancedReport validateLocally(String content, String profile, String valueSetLibrary, List<String> ccontexts, String vsBinding,
 	        String coConstraintsContext, String slicingContext, String id, Context context, String configuration, HashMap<String, String> apikeys)
 			throws Exception {
-		return validateLocally(content, profile, valueSetLibrary, ccontexts, vsBinding, coConstraintsContext, slicingContext, id, context, configuration, apikeys, null);
+		return validateLocally(content, profile, valueSetLibrary, ccontexts, vsBinding, coConstraintsContext, slicingContext, id, context, configuration, apikeys, null,null);
 	}
 
 	//validate locally for better performance with the latest validation engine.
 	public EnhancedReport validateLocally(String content, String profile, String valueSetLibrary, List<String> ccontexts, String vsBinding,
-			String coConstraintsContext, String slicingContext, String id, Context context, String configuration, HashMap<String, String> apikeys, Map<String, Class<? extends ValueSetProxy>> valueSetProxies)
+			String coConstraintsContext, String slicingContext, String id, Context context, String configuration, HashMap<String, String> apikeys
+			,Boolean useHttp,  Map<String, Class<? extends ValueSetProxy>> valueSetProxies)
 			throws Exception {
 		Report r;
 		// configure external value set validation/fetching
@@ -148,15 +159,8 @@ public class ValidationProxy {
 		cm.setMaxTotal(10); // Increase the maximum number of connections
 //		cm.setDefaultMaxPerRoute(10);
 		
-		CloseableHttpClient httpClient = HttpClients.custom().setDefaultRequestConfig(requestConfig).disableCookieManagement()
-				.setSSLSocketFactory(socketFactory).addInterceptorFirst(new HttpRequestInterceptor() {
-					@Override
-					public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
-						context.getAttribute(ExternalValueSetClient.HTTP_CONTEXT_VS_BINDING_IDENTIFIER).toString();
-						request.addHeader("X-API-KEY",
-								apikeys.get(context.getAttribute(ExternalValueSetClient.HTTP_CONTEXT_VS_BINDING_IDENTIFIER).toString()));
-					}
-				}).setConnectionManager(cm).build();
+	
+		
 
 		
 		InputStream profileIS = IOUtils.toInputStream(profile, StandardCharsets.UTF_8);
@@ -183,9 +187,27 @@ public class ValidationProxy {
 		}
 
 		ValidationContext validationContext;
-		if (valueSetLibrary != null) {
-			builder.useDefaultValueSetFactory(valueSetLibraryIS, httpClient, true);
+		
+		
+		
+		if (useHttp) {
+			CloseableHttpClient httpClient = HttpClients.custom().setDefaultRequestConfig(requestConfig).disableCookieManagement()
+					.setSSLSocketFactory(socketFactory).addInterceptorFirst(new HttpRequestInterceptor() {
+						@Override
+						public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
+							context.getAttribute(ExternalValueSetClient.HTTP_CONTEXT_VS_BINDING_IDENTIFIER).toString();
+							request.addHeader("X-API-KEY",
+									apikeys.get(context.getAttribute(ExternalValueSetClient.HTTP_CONTEXT_VS_BINDING_IDENTIFIER).toString()));
+						}
+					}).setConnectionManager(cm).build();
+			if (valueSetLibrary != null) {
+				builder.useDefaultValueSetFactory(valueSetLibraryIS, httpClient, true);
+			}
+		}else {
+			builder.useDefaultValueSetFactoryWithoutHttp(valueSetLibraryIS, true);
 		}
+		
+		
 		
 
 		scala.collection.immutable.List<InputStream> conformanceContexts = JavaConverters.collectionAsScalaIterable(cStreams).toList();
