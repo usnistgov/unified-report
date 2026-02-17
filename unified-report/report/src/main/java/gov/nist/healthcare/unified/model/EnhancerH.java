@@ -35,7 +35,8 @@ public class EnhancerH {
 	private static final String CLASSIFICATION_ALERT = ConfigHandler.getClassificationValue("alert").toUpperCase();
 	private static final String CLASSIFICATION_INFORMATIONAL = ConfigHandler.getClassificationValue("informational").toUpperCase();
 	private static final String CLASSIFICATION_AFFIRMATIVE = ConfigHandler.getClassificationValue("affirmative").toUpperCase();
-	private static final String CLASSIFICATION_NOTE = ConfigHandler.getClassificationValue("note").toUpperCase();
+	// no more note classification
+	//	private static final String CLASSIFICATION_NOTE = ConfigHandler.getClassificationValue("note").toUpperCase();
 	private static final String CLASSIFICATION_SPEC_ERROR = ConfigHandler.getClassificationValue("spec-error").toUpperCase();
 
 	public static void enhanceHeader(EnhancedReport er, ArrayList<Section> mds,
@@ -107,9 +108,11 @@ public class EnhancerH {
 					warning++;
 				} else if (e.getClassification().toUpperCase().equals(CLASSIFICATION_SPEC_ERROR)) {
 					specerror++;
-				} else if (e.getClassification().toUpperCase().equals(CLASSIFICATION_NOTE)) {
-					note++;
 				}
+				//no more note classification
+//				else if (e.getClassification().toUpperCase().equals(CLASSIFICATION_NOTE)) {
+//					note++;
+//				}
 			}
 		}
 

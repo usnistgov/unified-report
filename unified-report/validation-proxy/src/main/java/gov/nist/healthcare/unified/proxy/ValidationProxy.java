@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import hl7.v2.validation.vs.factory.impl.java.ValueSetProxy;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
@@ -27,6 +26,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+import com.typesafe.config.ConfigRenderOptions;
 
 import gov.nist.healthcare.unified.enums.Context;
 import gov.nist.healthcare.unified.model.EnhancedReport;
@@ -36,6 +38,7 @@ import gov.nist.validation.report.Report;
 import hl7.v2.validation.ValidationContext;
 import hl7.v2.validation.ValidationContextBuilder;
 import hl7.v2.validation.vs.external.client.ExternalValueSetClient;
+import hl7.v2.validation.vs.factory.impl.java.ValueSetProxy;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -79,7 +82,7 @@ public class ValidationProxy {
 				HashMap<String, String> apikeys = (HashMap<String, String>)options.get("apikeys"); 
 				String externalValidationVersion = (String)options.get("externalValidationVersion");
 				Boolean useHttp = (Boolean)options.get("useHttp");
-				Map<String, Class<? extends ValueSetProxy>> valueSetProxies = ( Map<String, Class<? extends ValueSetProxy>>)options.get("valueSetProxies");
+				HashMap<String, Class<? extends ValueSetProxy>> valueSetProxies = ( HashMap<String, Class<? extends ValueSetProxy>>)options.get("valueSetProxies");
 		
 		if (externalValidationVersion == null || externalValidationVersion.equalsIgnoreCase(buildinfo.Info.version()) || urls == null || urls.get(externalValidationVersion) == null) {
 			return validateLocally(content, profile, valueSetLibrary, constraintsList, vsBinding, coConstraintsContext, slicingContext, conformanceProfileId,
